@@ -1,60 +1,10 @@
 import { _mergeoptions } from "./utils/_mergeOptions";
 import { _nicePriceSteps } from "./utils/_nicePriceSteps";
 import { _formatDate, _formatDateFull } from "./utils/time";
-
-// BLACKER CHART LIBRARY LICENSE GNU GPLv3.0
-
-// ── CONSTANTS ────────────────────────────────────────────────────────────────
-const PRICE_SCALE_W = 72;
-const MIN_BAR_W = 1;
-const MAX_BAR_W = 40;
-const DEFAULT_BAR_W = 8;
-const SCROLL_ZOOM_FACTOR = 0.12;
-
-const DEFAULT_OPTIONS = {
-  chartType: "candlestick", // 'candlestick' | 'line' | 'area'
-  rightPadBars: 20,
-  barWidth: DEFAULT_BAR_W,
-  minBarWidth: MIN_BAR_W,
-  maxBarWidth: MAX_BAR_W,
-  zoomFactor: SCROLL_ZOOM_FACTOR,
-
-  colors: {
-    bg: "#181A20",
-    bg2: "#1E2329",
-    bg3: "#2B3139",
-
-    grid: "rgba(43,49,57,0.35)",
-    gridAlt: "rgba(43,49,57,0.15)",
-
-    text: "#EAECEF",
-    textDim: "#848E9C",
-
-    bull: "rgb(8,153,129)",
-    bear: "rgb(242,54,69)",
-
-    bullDim: "rgba(8,153,129,0.15)",
-    bearDim: "rgba(242,54,69,0.15)",
-
-    line: "#F0B90B",
-
-    area1: "rgba(240,185,11,0.18)",
-    area2: "rgba(240,185,11,0)",
-
-    ma: "#F0B90B",
-
-    bb: "#A970FF",
-    bbFill: "rgba(169,112,255,0.08)",
-
-    cross: "rgba(234,236,239,0.25)",
-    crossPt: "#F0B90B",
-
-    vol: "rgba(240,185,11,0.25)",
-    volBull: "rgba(8,153,129,0.35)",
-    volBear: "rgba(242,54,69,0.35)",
-  },
-};
-
+import { PRICE_SCALE_W, DEFAULT_OPTIONS, DEFAULT_BAR_W } from "./core/config";
+import { _loadCssVariables } from "./render/theme";
+import { _buildLayout } from "./ui/layout";
+import { _grabCanvases } from "./render/canvas";
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
 //--------------------------------------------------------------------------------------------------------------------
@@ -155,90 +105,16 @@ export class ChartEngine {
 
     this._abortController = new AbortController();
 
-    this._loadCssVariables();
-    this._buildLayout();
-    this._grabCanvases();
+    this._init();
+  }
+
+  _init() {
+    _loadCssVariables(this.options);
+    _buildLayout(this.area);
+    _grabCanvases(this);
     this._resize();
     this._bindEvents();
     this._startLoop();
-  }
-
-  /**
-   * Applies configured color values as CSS custom properties
-   * on the document root element.
-   */
-  _loadCssVariables() {
-    const root = document.documentElement;
-
-    Object.entries(this.options.colors).forEach(([key, value]) => {
-      root.style.setProperty(`--${key}`, value);
-    });
-  }
-
-  _buildLayout() {
-    const chartArea = this.area;
-
-    if (!chartArea) {
-      console.error("Not found id chart-area");
-      return;
-    }
-
-    chartArea.innerHTML = `
-    <div class="pane" id="pane-main">
-      <canvas class="chart-canvas" id="canvas-main"></canvas>
-      <canvas class="drawings-canvas" id="canvas-drawings"></canvas>
-      <canvas class="pricescale-canvas" id="canvas-pricescale"></canvas>
-      <canvas class="overlay-canvas" id="canvas-overlay"></canvas>
-    </div>
-
-    <div id="time-axis">
-      <canvas class="time-canvas" id="canvas-time"></canvas>
-    </div>
-
-    <div id="scrollbar">
-      <div id="scrollthumb"></div>
-    </div>
-
-    <div id="chart-legend"></div>
-    <div id="chart-indicators"></div>
-
-    <div id="statusbar">
-      <span id="status-fps">60 FPS</span>
-      <span id="status-bars"></span>
-      <span id="status-zoom"></span>
-      <span id="status-cursor"></span>
-    </div>
-  `;
-  }
-
-  /**
-   * Retrieves all chart DOM elements and initializes their
-   * corresponding 2D rendering contexts.
-   */
-  _grabCanvases() {
-    const area = this.area;
-    this.legendDiv = area.querySelector("#chart-legend");
-    this.indicatorsDiv = area.querySelector("#chart-indicators");
-
-    this.cMain = area.querySelector("#canvas-main");
-    this.ctxMain = this.cMain.getContext("2d");
-    this.cDrawings = area.querySelector("#canvas-drawings");
-    this.ctxDrawings = this.cDrawings.getContext("2d");
-    this.pScale = area.querySelector("#canvas-pricescale");
-    this.ctxPScale = this.pScale.getContext("2d");
-    this.oMain = area.querySelector("#canvas-overlay");
-    this.ctxOMain = this.oMain.getContext("2d");
-    this.cTime = area.querySelector("#canvas-time");
-    this.ctxTime = this.cTime.getContext("2d");
-
-    // Cachear el resto para no volver a tocar document.getElementById
-    this.paneMainEl = area.querySelector("#pane-main");
-    this.timeAxisEl = area.querySelector("#time-axis");
-    this.scrollbarEl = area.querySelector("#scrollbar");
-    this.scrollThumbEl = area.querySelector("#scrollthumb");
-    this.statusFpsEl = area.querySelector("#status-fps");
-    this.statusBarsEl = area.querySelector("#status-bars");
-    this.statusZoomEl = area.querySelector("#status-zoom");
   }
 
   /**
@@ -1503,7 +1379,7 @@ export class ChartEngine {
 
   applyOptions(newOptions) {
     this.options = _mergeoptions(this.options, newOptions);
-    this._loadCssVariables();
+    _loadCssVariables(this.options);
     this.dirty = true;
   }
 
