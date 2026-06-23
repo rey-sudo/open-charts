@@ -1,4 +1,7 @@
-import { _mergeoptions } from "./utils/mergeOptions";
+import { _mergeoptions } from "./utils/_mergeOptions";
+import { _nicePriceSteps } from "./utils/_nicePriceSteps";
+import { _formatDate, _formatDateFull } from "./utils/time";
+
 // BLACKER CHART LIBRARY LICENSE GNU GPLv3.0
 
 // ── CONSTANTS ────────────────────────────────────────────────────────────────
@@ -579,7 +582,7 @@ export class ChartEngine {
     ctx.lineWidth = 1;
 
     // Horizontal price grid lines
-    const steps = this._nicePriceSteps(priceMin, priceMax, 6);
+    const steps = _nicePriceSteps(priceMin, priceMax, 6);
     steps.forEach((price) => {
       const y = Math.round(this._yOf(price, p, priceMin, priceMax)) + 0.5;
       ctx.beginPath();
@@ -632,7 +635,7 @@ export class ChartEngine {
       if (!this._isTimeGridLine(i, step)) continue;
       const x = this._xOf(i);
       if (x < 16 || x > cw - 16) continue;
-      ctx.fillText(this._formatDate(this.data[i].t, step), x, 15);
+      ctx.fillText(_formatDate(this.data[i].t, step), x, 15);
     }
   }
 
@@ -657,7 +660,7 @@ export class ChartEngine {
     ctx.stroke();
 
     // Labels en cada grid step
-    const steps = this._nicePriceSteps(priceMin, priceMax, 6);
+    const steps = _nicePriceSteps(priceMin, priceMax, 6);
     ctx.fillStyle = this.options.colors.textDim;
     ctx.font = "10px Inter, sans-serif";
     ctx.textAlign = "right";
@@ -924,7 +927,7 @@ export class ChartEngine {
     const d = this.data[idx];
     if (!d) return;
     const x = this._xOf(idx);
-    const label = this._formatDateFull(d.t);
+    const label = _formatDateFull(d.t, this.interval);
     const tw = 90;
     tCtx.save();
     tCtx.fillStyle = this.options.colors.cross;
@@ -1366,19 +1369,6 @@ export class ChartEngine {
   //  HELPERS
   //--------------------------------------------------------------------------------------------------------------------
 
-  _nicePriceSteps(min, max, count) {
-    const range = max - min;
-    const rough = range / count;
-    const mag = Math.pow(10, Math.floor(Math.log10(rough)));
-    const step =
-      [1, 2, 2.5, 5, 10].map((s) => s * mag).find((s) => s >= rough) ||
-      mag * 10;
-    const start = Math.ceil(min / step) * step;
-    const steps = [];
-    for (let v = start; v <= max; v += step) steps.push(+v.toFixed(10));
-    return steps;
-  }
-
   _timeGridStep() {
     const span = this._barsVisible() * this.interval; // segundos cubiertos
     if (span <= 2 * 3600) return "minute"; // ≤ 2h   → grid cada minuto
@@ -1413,68 +1403,6 @@ export class ChartEngine {
       return Math.floor(monthOf(t) / 3) !== Math.floor(monthOf(t0) / 3);
     if (step === "year") return yearOf(t) !== yearOf(t0);
     return false;
-  }
-
-  // t is an integer (Unix seconds). Convert once, only for display.
-  _tsToDate(t) {
-    return new Date(t * 1000);
-  }
-
-  _formatDate(t, step) {
-    const d = this._tsToDate(t);
-    const mo = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const hh = String(d.getUTCHours()).padStart(2, "0");
-    const mm = String(d.getUTCMinutes()).padStart(2, "0");
-    const dd = String(d.getUTCDate()).padStart(2, "0");
-    const yr = String(d.getUTCFullYear()).slice(2);
-
-    if (step === "minute") return `${hh}:${mm}`;
-    if (step === "hour") return `${hh}:00`;
-    if (step === "day") return `${mo[d.getUTCMonth()]} ${dd}`;
-    if (step === "week") return `${mo[d.getUTCMonth()]} ${dd}`;
-    if (step === "month") return `${mo[d.getUTCMonth()]} ${yr}`;
-    if (step === "quarter")
-      return `Q${Math.floor(d.getUTCMonth() / 3) + 1} ${yr}`;
-    return `${d.getUTCFullYear()}`;
-  }
-
-  _formatDateFull(t) {
-    const d = this._tsToDate(t);
-    const mo = [
-      "Jan",
-      "Feb",
-      "Mar",
-      "Apr",
-      "May",
-      "Jun",
-      "Jul",
-      "Aug",
-      "Sep",
-      "Oct",
-      "Nov",
-      "Dec",
-    ];
-    const date = `${mo[d.getUTCMonth()]} ${String(d.getUTCDate()).padStart(2, "0")}, ${d.getUTCFullYear()}`;
-    const hh = String(d.getUTCHours()).padStart(2, "0");
-    const mm = String(d.getUTCMinutes()).padStart(2, "0");
-    const ss = String(d.getUTCSeconds()).padStart(2, "0");
-
-    if (this.interval < 60) return `${date} ${hh}:${mm}:${ss}`; // sub-minuto
-    if (this.interval < 86400) return `${date} ${hh}:${mm}`; // intraday
-    return date; // daily+
   }
 
   /**
