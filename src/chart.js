@@ -23,7 +23,6 @@ import {
   MIN_BAR_W,
   MAX_BAR_W,
 } from "./core/config";
-import { _mergeoptions } from "./utils/_mergeOptions";
 import { _nicePriceSteps } from "./utils/_nicePriceSteps";
 import { _formatDate, _formatDateFull } from "./utils/time";
 import { _loadCssVariables } from "./render/theme";
@@ -47,6 +46,7 @@ import { _recomputeSeries } from "./core/_recomputeSeries";
 import { _updateLegend } from "./ui/_updateLegend";
 import { _isDifferentBar } from "./utils/_isDifferentBar";
 import { _updateSeriesIncremental } from "./core/_updateSeriesIncremental";
+import { applyOptions } from "./api/applyOptions";
 import { setData } from "./api/setData";
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -65,6 +65,7 @@ export class ChartEngine {
 
     this.api = {
       setData: setData.bind(this),
+      applyOptions: applyOptions.bind(this),
     };
 
     this.area = area;
@@ -278,12 +279,6 @@ export class ChartEngine {
     this._drawingModules.clear();
 
     if (this.area) this.area.innerHTML = "";
-  }
-
-  applyOptions(newOptions) {
-    this.options = _mergeoptions(this.options, newOptions);
-    _loadCssVariables(this.options);
-    this.dirty = true;
   }
 
   setChartType(type) {

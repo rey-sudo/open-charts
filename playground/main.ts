@@ -83,7 +83,7 @@ let container = document.getElementById("chart-area");
 
 let chart = createChart(container);
 
-chart.applyOptions({
+chart.api.applyOptions({
   colors: {
     bg: "#181A20",
     bg2: "#1E2329",
