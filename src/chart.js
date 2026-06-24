@@ -50,6 +50,8 @@ import { applyOptions } from "./api/applyOptions";
 import { setData } from "./api/setData";
 import { destroy } from "./api/detroy";
 import { update } from "./api/update";
+import { addSeries } from "./api/addSeries";
+import { removeSeries } from "./api/removeSeries";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -70,6 +72,8 @@ export class ChartEngine {
       applyOptions: applyOptions.bind(this),
       destroy: destroy.bind(this),
       update: update.bind(this),
+      addSeries: addSeries.bind(this),
+      removeSeries: removeSeries.bind(this),
     };
 
     this.area = area;
@@ -271,28 +275,6 @@ export class ChartEngine {
   //--------------------------------------------------------------------------------------------------------------------
   //  PUBLIC API
   //--------------------------------------------------------------------------------------------------------------------
-
-  addSeries(def) {
-    const params = {};
-    if (def.params) {
-      for (const [k, field] of Object.entries(def.params)) {
-        params[k] = { ...field }; // copy value, type, label, etc.
-      }
-    }
-
-    const entry = { def, values: [], enabled: true, params };
-    if (this.data.length) entry.values = def.compute(this.data);
-    this._series.set(def.id, entry);
-    _updateLegend.call(this);
-    return this; // chainable
-  }
-
-  // Remove a series by id
-  removeSeries(id) {
-    this._series.delete(id);
-    this.dirty = true;
-    return this;
-  }
 
   // Toggle enabled/disabled for a series by id
   toggleSeries(id) {

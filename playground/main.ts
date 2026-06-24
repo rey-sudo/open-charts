@@ -96,7 +96,7 @@ chart.api.applyOptions({
 
 chart.api.setData(normalizeCandles(fakeData));
 
-chart.addSeries({
+chart.api.addSeries({
   id: "candlestick",
   label: "Candlesticks",
   layer: "background", // Se suele renderizar atrás de los indicadores como las MA
@@ -222,7 +222,7 @@ chart.addSeries({
   },
 });
 
-chart.addSeries({
+chart.api.addSeries({
   id: "ma",
   label: "MA 20",
   color: "#ffb830",
