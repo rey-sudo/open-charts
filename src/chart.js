@@ -38,8 +38,10 @@ import { _visiblePriceRange } from "./core/_visiblePriceRange";
 import { _renderMain } from "./render/_renderMain";
 import { _renderPriceScale } from "./render/_renderPriceScale";
 import { _renderTimeAxis } from "./render/_renderTimeAxis";
+import { _timeGridStep } from "./render/_timeGridStep";
 import { _xOf } from "./utils/_xOf";
 import { _yOf } from "./utils/_yOf";
+
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
 //--------------------------------------------------------------------------------------------------------------------
@@ -240,7 +242,7 @@ export class ChartEngine {
     });
 
     // Vertical time grid lines
-    const timeStep = this._timeGridStep();
+    const timeStep = _timeGridStep.call(this);
     for (
       let i = this.viewStart;
       i < this.viewEnd && i < this.data.length;
@@ -582,21 +584,6 @@ export class ChartEngine {
       this.legendDiv.appendChild(ohlcContainer);
     }
     //----------------------------------------------------------
-  }
-
-  //--------------------------------------------------------------------------------------------------------------------
-  //  HELPERS
-  //--------------------------------------------------------------------------------------------------------------------
-
-  _timeGridStep() {
-    const span = this._barsVisible() * this.interval; // segundos cubiertos
-    if (span <= 2 * 3600) return "minute"; // ≤ 2h   → grid cada minuto
-    if (span <= 48 * 3600) return "hour"; // ≤ 2d   → grid cada hora
-    if (span <= 8 * 86400) return "day"; // ≤ 8d   → grid cada día
-    if (span <= 60 * 86400) return "week"; // ≤ 2m   → grid cada semana
-    if (span <= 365 * 86400) return "month"; // ≤ 1a   → grid cada mes
-    if (span <= 1460 * 86400) return "quarter"; // ≤ 4a   → grid cada trimestre
-    return "year";
   }
 
   _isTimeGridLine(i, step) {

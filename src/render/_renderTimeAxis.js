@@ -1,3 +1,4 @@
+import { _timeGridStep } from "./_timeGridStep";
 import { _formatDate } from "../utils/time";
 
 export function _renderTimeAxis() {
@@ -11,7 +12,7 @@ export function _renderTimeAxis() {
   ctx.fillRect(0, 0, W, H);
 
   if (!this.data.length) return;
-  const step = this._timeGridStep();
+  const step = _timeGridStep.call(this);
   ctx.fillStyle = this.options.colors.textDim;
   ctx.font = "9px Inter, sans-serif";
   ctx.textAlign = "center";
