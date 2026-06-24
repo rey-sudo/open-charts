@@ -8,6 +8,7 @@ import {
 } from "../core/config";
 import { _clampView } from "../core/_clampView";
 import { _updateScrollThumb } from "../ui/_updateScrollThumb";
+import { _updateStatusBar } from "../ui/_updateStatusBar";
 
 /**
  * Registers all user interaction and lifecycle event handlers
@@ -60,7 +61,7 @@ export function _bindEvents() {
         _updateScrollThumb.call(this);
 
         // Refresh status information displayed to the user.
-        this._updateStatus();
+        _updateStatusBar.call(this);
       }
 
       // Mark the overlay layer for redraw.
@@ -177,7 +178,7 @@ export function _bindEvents() {
       _updateScrollThumb.call(this);
 
       // Update UI status indicators.
-      this._updateStatus();
+      _updateStatusBar.call(this);
     },
     { passive: false, signal: this._abortController.signal },
   );
@@ -343,7 +344,7 @@ export function _bindEvents() {
       _updateScrollThumb.call(this);
 
       // Refresh viewport-related status information.
-      this._updateStatus();
+      _updateStatusBar.call(this);
     },
     { signal: this._abortController.signal },
   );

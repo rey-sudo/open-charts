@@ -33,6 +33,7 @@ import { _resize } from "./core/_resize";
 import { _bindEvents } from "./interactions/_bindEvents";
 import { _startLoop } from "./core/_startLoop";
 import { _updateScrollThumb } from "./ui/_updateScrollThumb";
+import { _updateStatusBar } from "./ui/_updateStatusBar";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -172,7 +173,7 @@ export class ChartEngine {
     this.viewStart = Math.max(0, this.viewEnd - capacity);
     this.dirty = true;
     _updateScrollThumb.call(this);
-    this._updateStatus();
+    _updateStatusBar.call(this);
   }
 
   // Recompute values for all registered series (called on full load)
@@ -765,11 +766,6 @@ export class ChartEngine {
     return false;
   }
 
-  _updateStatus() {
-    this.statusBarsEl.textContent = `${this._barsVisible()} bars`;
-    this.statusZoomEl.textContent = `×${this.barWidth.toFixed(1)}`;
-  }
-
   _updateLegend() {
     if (!this.indicatorsDiv) return;
 
@@ -866,7 +862,7 @@ export class ChartEngine {
         this.viewStart = Math.max(0, this.viewEnd - capacity);
       }
       _updateScrollThumb.call(this);
-      this._updateStatus();
+      _updateStatusBar.call(this);
     } else {
       // ── Tick: mutate last candle in place ─────────────────────────────
       if (candle.h != null) last.h = Math.max(last.h, candle.h);
@@ -999,7 +995,7 @@ export class ChartEngine {
     this.viewStart = Math.max(0, this.viewEnd - capacity);
     this.dirty = true;
     _updateScrollThumb.call(this);
-    this._updateStatus();
+    _updateStatusBar.call(this);
   }
 
   addDrawingModule(moduleDef) {

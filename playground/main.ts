@@ -313,4 +313,4 @@ chart.addSeries({
   },
 });
 
-chart._updateStatus();
+
