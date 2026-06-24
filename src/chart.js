@@ -34,6 +34,7 @@ import { _bindEvents } from "./interactions/_bindEvents";
 import { _startLoop } from "./core/_startLoop";
 import { _updateScrollThumb } from "./ui/_updateScrollThumb";
 import { _updateStatusBar } from "./ui/_updateStatusBar";
+import { _visiblePriceRange } from "./core/_visiblePriceRange";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -225,38 +226,12 @@ export class ChartEngine {
     );
   }
 
-  // ── PRICE RANGE ──────────────────────────────────────────────────────────
-  _visiblePriceRange() {
-    let lo = Infinity,
-      hi = -Infinity;
-    const vs = Math.max(0, this.viewStart);
-    const ve = Math.min(this.data.length, this.viewEnd);
-    for (let i = vs; i < ve; i++) {
-      if (this.data[i].l < lo) lo = this.data[i].l;
-      if (this.data[i].h > hi) hi = this.data[i].h;
-    }
-    // Let enabled series extend the visible price range (e.g. BB bands)
-    this._series.forEach(({ def, values, enabled }) => {
-      if (!enabled || !def.priceExtent) return;
-      const ext = def.priceExtent(values, vs, ve);
-      if (ext) {
-        lo = Math.min(lo, ext[0]);
-        hi = Math.max(hi, ext[1]);
-      }
-    });
-    // Add padding
-    const pad = (hi - lo) * 0.06;
-    return { lo: lo - pad, hi: hi + pad };
-  }
-
-  // ── MAIN RAF LOOP ─────────────────────────────────────────────────────────
-
   // ═══════════════════════════════════════════════════════════════════════════
   //  RENDER PASS — only called when dirty
   // ═══════════════════════════════════════════════════════════════════════════
   _render() {
     if (!this.data.length) return;
-    const { lo, hi } = this._visiblePriceRange();
+    const { lo, hi } = _visiblePriceRange.call(this);
     this._renderMain(lo, hi);
     this._renderPriceScale(lo, hi);
     this._renderTimeAxis();
@@ -403,7 +378,7 @@ export class ChartEngine {
   }
 
   _renderDrawingModules() {
-    const { lo, hi } = this._visiblePriceRange();
+    const { lo, hi } = _visiblePriceRange.call(this);
     const p = this.panes.main;
 
     // Funciones de conversión frescas para este frame
@@ -467,7 +442,7 @@ export class ChartEngine {
       },
 
       yOf(price) {
-        const { lo, hi } = engine._visiblePriceRange();
+        const { lo, hi } = _visiblePriceRange.call(this);
         return engine._yOf(price, engine.panes.main, lo, hi);
       },
       indexAtX(x) {
@@ -475,7 +450,7 @@ export class ChartEngine {
       },
 
       priceAtY(y) {
-        const { lo, hi } = engine._visiblePriceRange();
+        const { lo, hi } = _visiblePriceRange.call(this);
         const h = engine.panes.main.h;
         return lo + ((hi - lo) * (h * 0.96 - y)) / (h * 0.92);
       },
@@ -495,7 +470,7 @@ export class ChartEngine {
         const target = event === "mouseup" ? window : area;
 
         const handler = (e) => {
-          const { lo, hi } = engine._visiblePriceRange();
+          const { lo, hi } = _visiblePriceRange.call(this);
           const p = engine.panes.main;
           const localX = e.clientX - p.x;
           const localY = e.clientY - p.y;
@@ -526,7 +501,7 @@ export class ChartEngine {
     if (!this.mouse.inside || !this.data.length) {
       // Still draw the live price line even without crosshair
       if (this._liveMode && this.data.length) {
-        const { lo, hi } = this._visiblePriceRange();
+        const { lo, hi } = _visiblePriceRange.call(this);
         this._drawLivePulse(this.ctxOMain, this.panes.main, lo, hi);
       }
       return;
@@ -547,7 +522,7 @@ export class ChartEngine {
     );
     const d = this.data[barIdx]; // may be undefined in right-padding zone
 
-    const { lo, hi } = this._visiblePriceRange();
+    const { lo, hi } = _visiblePriceRange.call(this);
 
     // Live price dash — drawn unconditionally so it survives the !d early-exit below
     if (this._liveMode) this._drawLivePulse(this.ctxOMain, pMain, lo, hi);
