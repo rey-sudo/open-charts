@@ -48,6 +48,7 @@ import { _isDifferentBar } from "./utils/_isDifferentBar";
 import { _updateSeriesIncremental } from "./core/_updateSeriesIncremental";
 import { applyOptions } from "./api/applyOptions";
 import { setData } from "./api/setData";
+import { destroy } from "./api/detroy";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -66,6 +67,7 @@ export class ChartEngine {
     this.api = {
       setData: setData.bind(this),
       applyOptions: applyOptions.bind(this),
+      destroy: destroy.bind(this),
     };
 
     this.area = area;
@@ -267,19 +269,6 @@ export class ChartEngine {
   //--------------------------------------------------------------------------------------------------------------------
   //  PUBLIC API
   //--------------------------------------------------------------------------------------------------------------------
-
-  destroy() {
-    this._running = false;
-
-    if (this._rafId) cancelAnimationFrame(this._rafId);
-
-    this._abortController.abort();
-
-    this._drawingModules.forEach((handle) => handle.destroy());
-    this._drawingModules.clear();
-
-    if (this.area) this.area.innerHTML = "";
-  }
 
   setChartType(type) {
     this.chartType = type;
