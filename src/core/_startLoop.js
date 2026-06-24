@@ -1,3 +1,4 @@
+import { _renderDrawingModules } from "../render/_renderDrawingModules";
 import { _render } from "../render/_render";
 
 export function _startLoop() {
@@ -25,7 +26,7 @@ export function _startLoop() {
     }
 
     if (this.drawingsDirty) {
-      this._renderDrawingModules();
+      _renderDrawingModules.call(this);
       this.drawingsDirty = false;
     }
 
