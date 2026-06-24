@@ -43,6 +43,9 @@ import { _isTimeGridLine } from "./render/_isTimeGridLine";
 import { _xOf } from "./utils/_xOf";
 import { _yOf } from "./utils/_yOf";
 import { _indexAtX } from "./utils/_indexAtX";
+import { _recomputeSeries } from "./core/_recomputeSeries";
+import { _updateLegend } from "./ui/_updateLegend";
+import { _isDifferentBar } from "./utils/_isDifferentBar";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -163,40 +166,7 @@ export class ChartEngine {
   }
 
   // ── DATA LOADING ──────────────────────────────────────────────────────────
-  setData(data) {
-    this.data = data;
 
-    if (data.length >= 2) {
-      let minGap = Infinity;
-      const n = Math.min(data.length - 1, 10);
-      for (let i = 0; i < n; i++)
-        minGap = Math.min(minGap, data[i + 1].t - data[i].t);
-      this.interval = minGap;
-    } else {
-      this.interval = 86400; // fallback: daily
-    }
-
-    this._recomputeSeries();
-
-    // Cache the close of the second-to-last bar (used by incremental RSI tick)
-    this._prevClose =
-      data.length >= 2 ? data[data.length - 2].c : (data[0]?.c ?? 0);
-
-    // Start at the right end — leave rightPadBars of empty space after the last candle
-    const capacity = Math.floor(this.chartW / this.barWidth);
-    this.viewEnd = data.length + this.rightPadBars;
-    this.viewStart = Math.max(0, this.viewEnd - capacity);
-    this.dirty = true;
-    _updateScrollThumb.call(this);
-    _updateStatusBar.call(this);
-  }
-
-  // Recompute values for all registered series (called on full load)
-  _recomputeSeries() {
-    this._series.forEach((entry) => {
-      entry.values = entry.def.compute(this.data, entry.params);
-    });
-  }
   // Incremental series update — O(period) per series, not O(n).
   // Falls back to full compute() if the series has no updateIncremental hook.
   _updateSeriesIncremental(isNewBar) {
@@ -304,49 +274,37 @@ export class ChartEngine {
     };
   }
 
-
-
-
-
-
-  _updateLegend() {
-    if (!this.indicatorsDiv) return;
-
-    this._series.forEach(({ def, enabled }) => {
-      const itemId = `chart-indicators-item-${def.id}`;
-      let item = document.getElementById(itemId);
-
-      const opacity = enabled ? "1" : "0.4";
-      const title = enabled ? "click to hide" : "click to show";
-      const innerHTML =
-        `<div class="chart-indicators-item-dot" style="background:${def.color}"></div>` +
-        `<span>${def.label}</span>`;
-
-      if (item) {
-        item.style.opacity = opacity;
-        item.title = title;
-        item.innerHTML = innerHTML;
-      } else {
-        item = document.createElement("div");
-        item.id = itemId;
-        item.className = "chart-indicators-item";
-        item.style.cursor = "pointer";
-        item.style.opacity = opacity;
-        item.title = title;
-        item.innerHTML = innerHTML;
-
-        item.addEventListener("click", () => {
-          this.toggleSeries(def.id);
-        });
-
-        this.indicatorsDiv.appendChild(item);
-      }
-    });
-  }
-
   //--------------------------------------------------------------------------------------------------------------------
   //  PUBLIC API
   //--------------------------------------------------------------------------------------------------------------------
+
+  setData(data) {
+    this.data = data;
+
+    if (data.length >= 2) {
+      let minGap = Infinity;
+      const n = Math.min(data.length - 1, 10);
+      for (let i = 0; i < n; i++)
+        minGap = Math.min(minGap, data[i + 1].t - data[i].t);
+      this.interval = minGap;
+    } else {
+      this.interval = 86400; // fallback: daily
+    }
+
+    _recomputeSeries.call(this);
+
+    // Cache the close of the second-to-last bar (used by incremental RSI tick)
+    this._prevClose =
+      data.length >= 2 ? data[data.length - 2].c : (data[0]?.c ?? 0);
+
+    // Start at the right end — leave rightPadBars of empty space after the last candle
+    const capacity = Math.floor(this.chartW / this.barWidth);
+    this.viewEnd = data.length + this.rightPadBars;
+    this.viewStart = Math.max(0, this.viewEnd - capacity);
+    this.dirty = true;
+    _updateScrollThumb.call(this);
+    _updateStatusBar.call(this);
+  }
 
   destroy() {
     this._running = false;
@@ -376,7 +334,8 @@ export class ChartEngine {
     if (!this.data.length) return this;
 
     const last = this.data[this.data.length - 1];
-    const isNewBar = candle.t != null && this._isDifferentBar(candle.t, last.t);
+    const isNewBar =
+      candle.t != null && _isDifferentBar.call(this, candle.t, last.t);
 
     // ── Was the viewport pinned to the live right edge before this tick?
     // "At edge" means viewEnd was within rightPadBars slots of the old data end.
@@ -421,12 +380,6 @@ export class ChartEngine {
     return this;
   }
 
-  // Compare two integer-second timestamps at day granularity.
-  // For intraday bars change 86400 to the bar interval in seconds.
-  _isDifferentBar(t1, t2) {
-    return Math.floor(t1 / this.interval) !== Math.floor(t2 / this.interval);
-  }
-
   // ─── Series API ──────────────────────────────────────────────────────────
 
   addSeries(def) {
@@ -440,7 +393,7 @@ export class ChartEngine {
     const entry = { def, values: [], enabled: true, params };
     if (this.data.length) entry.values = def.compute(this.data);
     this._series.set(def.id, entry);
-    this._updateLegend();
+    _updateLegend.call(this);
     return this; // chainable
   }
 
@@ -456,7 +409,7 @@ export class ChartEngine {
     const entry = this._series.get(id);
     if (!entry) return this;
     entry.enabled = !entry.enabled;
-    this._updateLegend();
+    _updateLegend.call(this);
     this.dirty = true;
     return this;
   }
@@ -466,7 +419,7 @@ export class ChartEngine {
     const entry = this._series.get(id);
     if (entry) {
       entry.enabled = true;
-      this._updateLegend();
+      _updateLegend.call(this);
       this.dirty = true;
     }
     return this;
@@ -477,7 +430,7 @@ export class ChartEngine {
     const entry = this._series.get(id);
     if (entry) {
       entry.enabled = false;
-      this._updateLegend();
+      _updateLegend.call(this);
       this.dirty = true;
     }
     return this;
