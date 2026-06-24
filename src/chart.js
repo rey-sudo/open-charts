@@ -42,6 +42,7 @@ import { _timeGridStep } from "./render/_timeGridStep";
 import { _isTimeGridLine } from "./render/_isTimeGridLine";
 import { _xOf } from "./utils/_xOf";
 import { _yOf } from "./utils/_yOf";
+import { _indexAtX } from "./utils/_indexAtX";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -54,6 +55,7 @@ export class ChartEngine {
     this.utils = {
       _xOf: _xOf.bind(this),
       _yOf: _yOf.bind(this),
+      _indexAtX: _indexAtX.bind(this),
     };
 
     this.area = area;
@@ -216,15 +218,6 @@ export class ChartEngine {
     return this.viewEnd - this.viewStart;
   }
 
-  /**
-   * Converts a horizontal pixel position within the chart
-   * into the corresponding data index based on current zoom
-   * (bar width) and viewport offset.
-   */
-  _indexAtX(x) {
-    return Math.round((x - this.barWidth / 2) / this.barWidth) + this.viewStart;
-  }
-
   // ── MAIN PANE ─────────────────────────────────────────────────────────────
 
   _drawGrid(ctx, W, H, cw, priceMin, priceMax, p) {
@@ -305,7 +298,7 @@ export class ChartEngine {
         return engine.utils._yOf(price, engine.panes.main, lo, hi);
       },
       indexAtX(x) {
-        return engine._indexAtX(x);
+        return engine.utils._indexAtX(x);
       },
 
       priceAtY(y) {
@@ -333,7 +326,7 @@ export class ChartEngine {
           const p = engine.panes.main;
           const localX = e.clientX - p.x;
           const localY = e.clientY - p.y;
-          const barIdx = engine._indexAtX(localX);
+          const barIdx = engine.utils._indexAtX(localX);
           const price = lo + ((hi - lo) * (p.h * 0.96 - localY)) / (p.h * 0.92);
           fn({
             localX,
@@ -377,7 +370,7 @@ export class ChartEngine {
     const localX = mx - pMain.x;
     const barIdx = Math.max(
       this.viewStart,
-      Math.min(this.viewEnd - 1, this._indexAtX(localX)),
+      Math.min(this.viewEnd - 1, this.utils._indexAtX(localX)),
     );
     const d = this.data[barIdx]; // may be undefined in right-padding zone
 

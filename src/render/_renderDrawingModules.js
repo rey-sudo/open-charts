@@ -7,7 +7,7 @@ export function _renderDrawingModules() {
   // Funciones de conversión frescas para este frame
   const xOf = (i) => this.utils._xOf(i);
   const yOf = (price) => this.utils._yOf(price, p, lo, hi);
-  const indexAtX = (x) => this._indexAtX(x);
+  const indexAtX = (x) => this.utils._indexAtX(x);
   const priceAtY = (y) => lo + ((hi - lo) * (p.h * 0.96 - y)) / (p.h * 0.92);
 
   this.ctxDrawings.clearRect(0, 0, this.cDrawings.width, this.cDrawings.height);

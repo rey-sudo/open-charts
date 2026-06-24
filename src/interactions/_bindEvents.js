@@ -152,7 +152,7 @@ export function _bindEvents() {
       const localX = e.clientX - this.panes.main.x;
 
       // Identify the bar index under the cursor (zoom focus point).
-      const focusIdx = this._indexAtX(localX);
+      const focusIdx = this.utils._indexAtX(localX);
 
       // Apply the new zoom level.
       this.barWidth = newBarW;
