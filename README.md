@@ -16,4 +16,4 @@ import {} from "open-charts";
 
 ## License
 
-MIT
+GPL-3.0-only
