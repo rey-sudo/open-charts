@@ -16,12 +16,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
 import {
-  PRICE_SCALE_W,
   DEFAULT_OPTIONS,
   DEFAULT_BAR_W,
-  SCROLL_ZOOM_FACTOR,
-  MIN_BAR_W,
-  MAX_BAR_W,
+  type ChartOptions,
 } from "./core/config";
 import { _nicePriceSteps } from "./utils/_nicePriceSteps";
 import { _formatDate, _formatDateFull } from "./utils/time";
@@ -68,7 +65,39 @@ import { addDrawingModule } from "./api/addDrawingModule";
 //--------------------------------------------------------------------------------------------------------------------
 
 export class ChartEngine {
-  constructor(area) {
+  public options: ChartOptions;
+  public utils: any;
+  public api: any;
+  public area: any;
+  public data: any;
+  public _series: any;
+  public _running: any;
+  public _rafId: any;
+  public barWidth: any;
+  public interval: any;
+  public rightPadBars: any;
+  public viewStart: any;
+  public viewEnd: any;
+  public dirty: any;
+  public overlayDirty: any;
+  public chartType: any;
+  public mouse: any;
+  public isPanning: any;
+  public panOrigin: any;
+  public _liveMode: any;
+  public _prevClose: any;
+  public _drawingModules: any;
+  public _pointerClaimed: any;
+  public drawingsDirty: any;
+  public _dmEventHandlers: any;
+  public fps: any;
+  public _fpsFrames: any;
+  public _fpsTime: any;
+  public panes: any;
+  public chartW: any;
+  public _abortController: any;
+
+  constructor(area: HTMLElement) {
     this.options = { ...DEFAULT_OPTIONS };
 
     this.utils = {
