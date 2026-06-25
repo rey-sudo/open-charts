@@ -21,8 +21,8 @@ import {
 import { _nicePriceSteps } from "../utils/_nicePriceSteps";
 import { _formatDate, _formatDateFull } from "../utils/time";
 import { _loadCssVariables } from "../render/_loadCssVariables";
-import { _buildLayout } from "../ui/layout";
-import { _grabCanvases } from "../render/canvas";
+import { _buildLayout } from "../ui/_buildLayout";
+import { _grabCanvases } from "../render/_grabCanvases";
 import { _resize } from "../core/_resize";
 import { _bindEvents } from "../interactions/_bindEvents";
 import { _startLoop } from "../core/_startLoop";
@@ -94,6 +94,32 @@ export class ChartEngine {
   public panes: any;
   public chartW: any;
   public _abortController: any;
+
+  public legendDiv: HTMLElement | undefined;
+  public indicatorsDiv: HTMLElement | undefined;
+
+  public cMain: HTMLCanvasElement | undefined;
+  public ctxMain: CanvasRenderingContext2D | undefined;
+
+  public cDrawings: any;
+  public ctxDrawings: CanvasRenderingContext2D | undefined;
+
+  public pScale: any;
+  public ctxPScale: CanvasRenderingContext2D | undefined;
+
+  public oMain: any;
+  public ctxOMain: CanvasRenderingContext2D | undefined;
+
+  public cTime: any;
+  public ctxTime: CanvasRenderingContext2D | undefined;
+
+  public paneMainEl: HTMLElement | undefined;
+  public timeAxisEl: HTMLElement | undefined;
+  public scrollbarEl: HTMLElement | undefined;
+  public scrollThumbEl: HTMLElement | undefined;
+  public statusFpsEl: HTMLElement | undefined;
+  public statusBarsEl: HTMLElement | undefined;
+  public statusZoomEl: HTMLElement | undefined;
 
   constructor(area: HTMLElement) {
     this.options = { ...DEFAULT_OPTIONS };

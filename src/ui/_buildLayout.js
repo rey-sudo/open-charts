@@ -1,11 +1,19 @@
+/**
+ * Builds and injects the chart DOM structure into the container.
+ *
+ * The layout includes:
+ * - Main chart pane and rendering canvases
+ * - Time axis
+ * - Horizontal scrollbar
+ * - Legend and indicators containers
+ * - Debug/status bar
+ *
+ * Returns `true` when the layout is successfully created.
+ */
 export function _buildLayout() {
   const chartArea = this.area;
 
-  if (!chartArea) {
-    console.error("Not found id chart-area");
-    return;
-  }
-
+  // Create the complete chart DOM structure.
   chartArea.innerHTML = `
     <div class="pane" id="pane-main">
       <canvas class="chart-canvas" id="canvas-main"></canvas>
@@ -32,4 +40,6 @@ export function _buildLayout() {
       <span id="status-cursor"></span>
     </div>
   `;
+
+  return true;
 }
