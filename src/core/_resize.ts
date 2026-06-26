@@ -24,7 +24,7 @@ import { _clampView } from "./_clampView";
  * - Price scale canvas: right-side price axis.
  */
 export function _resize(engine: ChartEngine) {
-  const dpr = window.devicePixelRatio || 1;
+  const dpr: number = window.devicePixelRatio || 1;
 
   /**
    * Configures a canvas for HiDPI rendering to ensure sharp,
@@ -35,11 +35,11 @@ export function _resize(engine: ChartEngine) {
    */
   const setCanvas = (canvas: HTMLCanvasElement, container: HTMLElement) => {
     // Get the container's current layout dimensions.
-    const r = container.getBoundingClientRect();
+    const r: DOMRect = container.getBoundingClientRect();
 
     // Compute the physical canvas width / height using the current DPR.
-    const w = Math.ceil(r.width * dpr);
-    const h = Math.ceil(r.height * dpr);
+    const w: number = Math.ceil(r.width * dpr);
+    const h: number = Math.ceil(r.height * dpr);
 
     // Set the canvas backing-store width / height in physical pixels.
     canvas.width = w;
@@ -59,10 +59,10 @@ export function _resize(engine: ChartEngine) {
   };
 
   // Main chart pane-main container.
-  const pMain = engine.paneMainEl;
+  const pMain: HTMLElement = engine.paneMainEl;
 
   // Bottom time axis container.
-  const tAxis = engine.timeAxisEl;
+  const tAxis: HTMLElement = engine.timeAxisEl;
 
   // Resize chart rendering layers.
   setCanvas(engine.cMain, pMain);
@@ -77,8 +77,8 @@ export function _resize(engine: ChartEngine) {
   setCanvas(engine.cTime, tAxis);
 
   // Read updated layout dimensions.
-  const mainR = pMain.getBoundingClientRect();
-  const timeR = tAxis.getBoundingClientRect();
+  const mainR: DOMRect = pMain.getBoundingClientRect();
+  const timeR: DOMRect = tAxis.getBoundingClientRect();
 
   // Resize the fixed width / height price scale canvas.
   engine.pScale.width = Math.ceil(PRICE_SCALE_W * dpr);
