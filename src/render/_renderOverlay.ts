@@ -4,24 +4,26 @@ import { _visiblePriceRange } from "../core/_visiblePriceRange";
 import { _drawPriceTag } from "./_drawPriceTag";
 import { _drawTimeTag } from "./_drawTimeTag";
 import { _updateOHLCVlegend } from "../ui/_updateOHLCVlegend";
+import type { ChartEngine } from "../core/chartEngine";
+import { _drawLivePulse } from "./_drawLivePulse";
 
-export function _renderOverlay() {
-  _clearOverlay.call(this, this.ctxOMain, this.panes.main);
+export function _renderOverlay(engine: ChartEngine) {
+  _clearOverlay.call(engine, engine.ctxOMain, engine.panes.main);
 
-  _renderTimeAxis.call(this);
+  _renderTimeAxis.call(engine);
 
-  if (!this.mouse.inside || !this.data.length) {
+  if (!engine.mouse.inside || !engine.data.length) {
     // Still draw the live price line even without crosshair
-    if (this._liveMode && this.data.length) {
-      const { lo, hi } = _visiblePriceRange.call(this);
-      _drawLivePulse.call(this, this.ctxOMain, this.panes.main, lo, hi);
+    if (engine._liveMode && engine.data.length) {
+      const { lo, hi } = _visiblePriceRange.call(engine);
+      _drawLivePulse.call(engine, engine.ctxOMain, engine.panes.main, lo, hi);
     }
     return;
   }
 
-  const mx = this.mouse.x;
-  const my = this.mouse.y;
-  const pMain = this.panes.main;
+  const mx = engine.mouse.x;
+  const my = engine.mouse.y;
+  const pMain = engine.panes.main;
 
   // Determine which pane mouse is in
   const inMain = my >= pMain.y && my < pMain.y + pMain.h;
@@ -29,25 +31,25 @@ export function _renderOverlay() {
   // Bar index under cursor
   const localX = mx - pMain.x;
   const barIdx = Math.max(
-    this.viewStart,
-    Math.min(this.viewEnd - 1, this.utils._indexAtX(localX)),
+    engine.viewStart,
+    Math.min(engine.viewEnd - 1, engine.utils._indexAtX(localX)),
   );
-  const d = this.data[barIdx]; // may be undefined in right-padding zone
+  const d = engine.data[barIdx]; // may be undefined in right-padding zone
 
-  const { lo, hi } = _visiblePriceRange.call(this);
+  const { lo, hi } = _visiblePriceRange.call(engine);
 
   // Live price dash — drawn unconditionally so it survives the !d early-exit below
-  if (this._liveMode) _drawLivePulse.call(this, this.ctxOMain, pMain, lo, hi);
+  if (engine._liveMode) _drawLivePulse.call(engine, engine.ctxOMain, pMain, lo, hi);
 
   // Crosshair X (shared across panes)
-  const snapX = Math.round(this.utils._xOf(barIdx)) + 0.5;
+  const snapX = Math.round(engine.utils._xOf(barIdx)) + 0.5;
 
   if (!d) {
-    const ctx = this.ctxOMain;
+    const ctx = engine.ctxOMain;
 
     ctx.save();
 
-    ctx.strokeStyle = this.options.colors.cross;
+    ctx.strokeStyle = engine.options.colors.cross;
     ctx.lineWidth = 1;
     ctx.setLineDash([4, 4]);
 
@@ -62,9 +64,9 @@ export function _renderOverlay() {
   }
 
   // Main pane crosshair
-  const ctx = this.ctxOMain;
+  const ctx = engine.ctxOMain;
   ctx.save();
-  ctx.strokeStyle = this.options.colors.cross;
+  ctx.strokeStyle = engine.options.colors.cross;
   ctx.lineWidth = 1;
   ctx.setLineDash([4, 4]);
 
@@ -77,34 +79,34 @@ export function _renderOverlay() {
     const localY = my - pMain.y;
     ctx.beginPath();
     ctx.moveTo(0, localY + 0.5);
-    ctx.lineTo(this.chartW, localY + 0.5);
+    ctx.lineTo(engine.chartW, localY + 0.5);
     ctx.stroke();
     // Price label on scale
     const crossPrice =
       lo + ((hi - lo) * (pMain.h * 0.96 - localY)) / (pMain.h * 0.92);
     _drawPriceTag.call(
-      this,
+      engine,
       ctx,
       crossPrice,
       localY,
       pMain,
-      this.options.colors.cross,
-      this.options.colors.textDim,
+      engine.options.colors.cross,
+      engine.options.colors.textDim,
     );
   }
   ctx.setLineDash([]);
 
   // Dot at close
-  const dotY = this.utils._yOf(d.c, pMain, lo, hi);
+  const dotY = engine.utils._yOf(d.c, pMain, lo, hi);
   ctx.beginPath();
   ctx.arc(snapX - 0.5, dotY, 3, 0, Math.PI * 2);
-  ctx.fillStyle = this.options.colors.crossPt;
+  ctx.fillStyle = engine.options.colors.crossPt;
   ctx.fill();
   ctx.restore();
 
   // Time label on axis
-  _drawTimeTag.call(this, barIdx);
+  _drawTimeTag.call(engine, barIdx);
 
   // OHLC header
-  _updateOHLCVlegend.call(this, d, barIdx);
+  _updateOHLCVlegend.call(engine, d, barIdx);
 }

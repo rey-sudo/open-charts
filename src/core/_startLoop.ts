@@ -23,19 +23,19 @@ export function _startLoop(engine: ChartEngine) {
     }
 
     if (engine.dirty) {
-      _render.call(engine);
+      _render(engine);
       engine.dirty = false;
       engine.drawingsDirty = true;
       engine.overlayDirty = true; // overlay needs redraw after data repaint
     }
 
     if (engine.drawingsDirty) {
-      _renderDrawingModules.call(engine);
+      _renderDrawingModules(engine);
       engine.drawingsDirty = false;
     }
 
     if (engine.overlayDirty) {
-      _renderOverlay.call(engine);
+      _renderOverlay(engine);
       engine.overlayDirty = false;
     }
   };

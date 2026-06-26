@@ -77,9 +77,9 @@ export class ChartEngine {
   public rightPadBars: any;
   public viewStart: number;
   public viewEnd: any;
-  public dirty: any;
-  public overlayDirty: any;
-  public chartType: any;
+  public dirty: boolean;
+  public overlayDirty: boolean;
+
   public mouse: any;
   public isPanning: any;
   public panOrigin: any;
@@ -197,7 +197,6 @@ export class ChartEngine {
     // Render state
     this.dirty = true;
     this.overlayDirty = true;
-    this.chartType = "candlestick";
 
     /**
      * Stores the latest mouse coordinates and hover state,
