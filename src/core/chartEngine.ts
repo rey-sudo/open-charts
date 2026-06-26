@@ -20,7 +20,7 @@ import {
 } from "../core/config";
 import { _nicePriceSteps } from "../utils/_nicePriceSteps";
 import { _formatDate, _formatDateFull } from "../utils/time";
-import { _loadCssVariables } from "../render/_loadCssVariables";
+import { _loadCssVariables } from "../core/_loadCssVariables";
 import { _buildLayout } from "../ui/_buildLayout";
 import { _grabCanvases } from "../render/_grabCanvases";
 import { _resize } from "../core/_resize";
