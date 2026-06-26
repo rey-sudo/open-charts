@@ -57,6 +57,7 @@ import { setSeriesParams } from "../api/setSeriesParams";
 import { getSeriesParams } from "../api/getSeriesParams";
 import { resetZoom } from "../api/resetZoom";
 import { addDrawingModule } from "../api/addDrawingModule";
+import type { ChartPanes } from "./types/engine";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -91,8 +92,12 @@ export class ChartEngine {
   public fps: any;
   public _fpsFrames: any;
   public _fpsTime: any;
-  public panes: any;
-  public chartW: any;
+
+  public panes: ChartPanes;
+  /**
+   * Stores the drawable chart width, excluding the price scale area.
+   */
+  public chartW: number;
   public _abortController: AbortController;
 
   public legendDiv!: HTMLElement;
@@ -231,12 +236,8 @@ export class ChartEngine {
     this._fpsFrames = 0;
     this._fpsTime = performance.now();
 
-    // Panes geometry (computed in resize)
-    this.panes = {};
+    this.panes = {} as ChartPanes;
 
-    /**
-     * Stores the drawable chart width, excluding the price scale area.
-     */
     this.chartW = 0;
 
     this._abortController = new AbortController();
