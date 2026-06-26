@@ -167,10 +167,6 @@ export class ChartEngine {
 
   public _dmEventHandlers: any;
 
-  public fps: number;
-  public _fpsFrames: number;
-  public _fpsTime: number;
-
   /**
    * Collection of chart panes and their layout information.
    */
@@ -269,11 +265,6 @@ export class ChartEngine {
   public scrollThumbEl!: HTMLElement;
 
   /**
-   * FPS status label.
-   */
-  public statusFpsEl!: HTMLElement;
-
-  /**
    * Visible bars status label.
    */
   public statusBarsEl!: HTMLElement;
@@ -350,11 +341,6 @@ export class ChartEngine {
     this.drawingsDirty = false;
 
     this._dmEventHandlers = {};
-
-    // Perf
-    this.fps = 60;
-    this._fpsFrames = 0;
-    this._fpsTime = performance.now();
 
     this.panes = {} as ChartPanes;
 

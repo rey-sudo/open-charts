@@ -36,7 +36,6 @@ export function _buildLayout(engine: ChartEngine) {
     <div id="chart-indicators"></div>
 
     <div id="statusbar">
-      <span id="status-fps">60 FPS</span>
       <span id="status-bars"></span>
       <span id="status-zoom"></span>
       <span id="status-cursor"></span>
