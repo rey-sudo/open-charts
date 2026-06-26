@@ -76,7 +76,7 @@ export interface SeriesDefinition {
   label: string;
 
   /** Display name. */
-  params: unknown;
+  params: Record<string, any>;
 
   /** Rendering layer. */
   layer: "background" | "foreground";
@@ -91,8 +91,12 @@ export interface SeriesDefinition {
     engine: ChartEngine,
     values: unknown[],
     priceMin: number,
-    priceMax: number
+    priceMax: number,
   ): void;
+
+  updateIncremental(values: any[], data: any[], isNewBar: boolean): void;
+
+  tooltipRow(values: any[], i: number): any;
 }
 
 /**

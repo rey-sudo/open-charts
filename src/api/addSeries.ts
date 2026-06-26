@@ -36,7 +36,7 @@ export function addSeries(
 
   // Compute indicator values immediately if data is already loaded.
   if (this.data.length) {
-    entry.values = def.compute(this.data);
+    entry.values = def.compute(this);
   }
 
   // Register the series using its unique identifier.
