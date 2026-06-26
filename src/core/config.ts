@@ -71,37 +71,37 @@ export const DEFAULT_OPTIONS: ChartOptions = {
   zoomFactor: SCROLL_ZOOM_FACTOR,
 
   colors: {
-    bg: "#131722",
-    bg2: "#1E222D",
-    bg3: "#2A2E39",
+    bg: "#18181B",
+    bg2: "#232326",
+    bg3: "#2F2F33",
 
-    grid: "rgba(42,46,57,0.6)",
-    gridAlt: "rgba(42,46,57,0.3)",
+    grid: "rgba(120,120,128,0.18)",
+    gridAlt: "rgba(120,120,128,0.10)",
 
-    text: "#D1D4DC",
-    textDim: "#787B86",
+    text: "#E4E4E7",
+    textDim: "#A1A1AA",
 
-    bull: "#22AB94",
-    bear: "#F23645",
+    bull: "#8B8B8B",
+    bear: "#5F5F66",
 
-    bullDim: "rgba(34,171,148,0.15)",
-    bearDim: "rgba(242,54,69,0.15)",
+    bullDim: "rgba(139,139,139,0.15)",
+    bearDim: "rgba(95,95,102,0.15)",
 
-    line: "#2962FF",
+    line: "#B3B3B3",
 
-    area1: "rgba(41,98,255,0.20)",
-    area2: "rgba(41,98,255,0)",
+    area1: "rgba(179,179,179,0.18)",
+    area2: "rgba(179,179,179,0)",
 
-    ma: "#FF9800",
+    ma: "#909090",
 
-    bb: "#7E57C2",
-    bbFill: "rgba(126,87,194,0.10)",
+    bb: "#757575",
+    bbFill: "rgba(117,117,117,0.10)",
 
-    cross: "rgba(209,212,220,0.25)",
-    crossPt: "#2962FF",
+    cross: "rgba(228,228,231,0.20)",
+    crossPt: "#C7C7CC",
 
-    vol: "rgba(41,98,255,0.20)",
-    volBull: "rgba(34,171,148,0.35)",
-    volBear: "rgba(242,54,69,0.35)",
+    vol: "rgba(179,179,179,0.20)",
+    volBull: "rgba(139,139,139,0.25)",
+    volBear: "rgba(95,95,102,0.25)",
   },
 };

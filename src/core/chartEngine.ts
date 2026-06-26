@@ -57,7 +57,7 @@ import { setSeriesParams } from "../api/setSeriesParams";
 import { getSeriesParams } from "../api/getSeriesParams";
 import { resetZoom } from "../api/resetZoom";
 import { addDrawingModule } from "../api/addDrawingModule";
-import type { ChartPanes } from "./types/engine";
+import type { ChartPanes, MouseState, PanOrigin } from "./types/engine";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -80,6 +80,7 @@ export class ChartEngine {
    * Indicates whether the process is currently running.
    */
   public _running: boolean;
+
   /**
    *  Stores the current requestAnimationFrame ID.
    */
@@ -130,7 +131,7 @@ export class ChartEngine {
    * Stores the latest mouse coordinates and hover state,
    * used by overlay elements.
    */
-  public mouse: any;
+  public mouse: MouseState;
 
   /**
    * Indicates whether a pan (click-and-drag navigation) interaction
@@ -142,23 +143,37 @@ export class ChartEngine {
    * Stores the pointer position and viewport state at the start
    * of a pan operation, used to calculate drag offsets.
    */
-  public panOrigin: any;
+  public panOrigin: PanOrigin;
 
+  /**
+   * Whether the viewport automatically follows the latest bar.
+   */
   public _liveMode: boolean;
 
+  /**
+   * Registered drawing tool modules.
+   */
   public _drawingModules: any;
 
   /**
    * Indicates whether pointer input is currently owned by another interaction.
    */
   public _pointerClaimed: boolean;
+
+  /**
+   * Indicates whether the drawings layer needs to be redrawn.
+   */
   public drawingsDirty: boolean;
+
   public _dmEventHandlers: any;
 
   public fps: number;
   public _fpsFrames: number;
   public _fpsTime: number;
 
+  /**
+   * Collection of chart panes and their layout information.
+   */
   public panes: ChartPanes;
 
   /**

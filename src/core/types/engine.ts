@@ -11,7 +11,7 @@ export interface TimePane {
 /**
  * Pane that owns a rendering canvas.
  */
-export interface RenderPane extends TimePane{
+export interface RenderPane extends TimePane {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   oCtx: CanvasRenderingContext2D;
@@ -37,4 +37,29 @@ export interface ChartPanes {
 
   /** Bottom time axis. */
   time: TimePane;
+}
+
+/**
+ * Current mouse state.
+ */
+export interface MouseState {
+  /** Mouse X position in CSS pixels. */
+  x: number;
+
+  /** Mouse Y position in CSS pixels. */
+  y: number;
+
+  /** Whether the pointer is inside the chart area. */
+  inside: boolean;
+}
+
+/**
+ * Initial viewport state captured when a pan gesture starts.
+ */
+export interface PanOrigin {
+  /** Pointer X position at the start of the pan. */
+  x: number;
+
+  /** First visible bar index when the pan started. */
+  viewStart: number;
 }

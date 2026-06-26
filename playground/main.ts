@@ -83,18 +83,7 @@ let container = document.getElementById("chart-area");
 
 let chart = createChart(container!);
 
-chart.api.applyOptions({
-  colors: {
-    bg: "#131722",
-    bg2: "#1E222D",
-    bg3: "#2A2E39",
-
-    bull: "#22AB94",
-    bear: "#F23645",
-
-    grid: "#2A2E39",
-  },
-});
+chart.api.applyOptions({});
 
 chart.api.setData(normalizeCandles(fakeData));
 
