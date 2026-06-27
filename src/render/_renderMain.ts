@@ -36,19 +36,19 @@ export function _renderMain(
 
   // Render background indicator series (e.g. filled areas)
   // before the foreground elements.
-  engine._series.forEach(({ def, values, enabled, params }) => {
+  engine._series.forEach(({ def, data, values, enabled, params }) => {
     if (!enabled || def.layer !== "background") return;
     ctx.save();
-    def.render(ctx, p, engine, values, priceMin, priceMax);
+    def.render(ctx, p, engine, data, values, priceMin, priceMax);
     ctx.restore();
   });
 
   // Render foreground indicator series (e.g. moving averages)
   // on top of the background layer.
-  engine._series.forEach(({ def, values, enabled, params }) => {
+  engine._series.forEach(({ def, data, values, enabled, params }) => {
     if (!enabled || def.layer === "background") return;
     ctx.save();
-    def.render(ctx, p, engine, values, priceMin, priceMax);
+    def.render(ctx, p, engine, data, values, priceMin, priceMax);
     ctx.restore();
   });
 }

@@ -91,6 +91,7 @@ export interface SeriesDefinition {
     ctx: CanvasRenderingContext2D,
     pane: RenderPane,
     engine: ChartEngine,
+    data: any,
     values: unknown[],
     priceMin: number,
     priceMax: number,

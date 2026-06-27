@@ -88,3 +88,4 @@ const candles = chart.addSeries(CandlestickSeries);
 
 candles.setData(normalizeCandles(fakeData));
 
+chart._init();

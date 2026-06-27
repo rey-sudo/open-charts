@@ -17,14 +17,15 @@ export const CandlestickSeries: SeriesDefinition = {
   },
 
   // Las velas no calculan un indicador nuevo, devuelven directamente el clon de la data OHLC
-  compute(engine: ChartEngine): any[] {
-    return engine.data;
+  compute(data: any): any[] {
+    return data;
   },
 
   render(
     ctx: CanvasRenderingContext2D,
     pane: RenderPane,
     engine: ChartEngine,
+    data: any,
     values: any[], // Mapeado a la estructura de datos OHLC
     priceMin: number,
     priceMax: number,
@@ -43,12 +44,8 @@ export const CandlestickSeries: SeriesDefinition = {
     ctx.save();
 
     // 3. Bucle de renderizado optimizado para la vista actual
-    for (
-      let i = engine.viewStart;
-      i < engine.viewEnd && i < engine.data.length;
-      i++
-    ) {
-      const d = engine.data[i]; // Estructura OHLC: { o, h, l, c }
+    for (let i = engine.viewStart; i < engine.viewEnd && i < data.length; i++) {
+      const d: any = data[i]; // Estructura OHLC: { o, h, l, c }
       if (!d) continue;
 
       // Conversión de coordenadas usando los métodos del engine
