@@ -21,10 +21,8 @@ import {
 import { _nicePriceSteps } from "../utils/_nicePriceSteps";
 import { _formatDate, _formatDateFull } from "../utils/time";
 import { _loadCssVariables } from "../core/_loadCssVariables";
-import { _buildLayout } from "../ui/_buildLayout";
-import { _grabCanvases } from "../render/_grabCanvases";
 import { _resize } from "../core/_resize";
-import { _bindEvents } from "../interactions/_bindEvents";
+import { _bindEvents } from "./_bindEvents";
 import { _startLoop } from "../core/_startLoop";
 import { _updateScrollThumb } from "../ui/_updateScrollThumb";
 import { _updateStatusBar } from "../ui/_updateStatusBar";
@@ -41,14 +39,15 @@ import { _recomputeSeries } from "../core/_recomputeSeries";
 import { _updateLegend } from "../ui/_updateLegend";
 import { _isDifferentBar } from "../utils/_isDifferentBar";
 import { _updateSeriesIncremental } from "../core/_updateSeriesIncremental";
-import type {
-  ChartPanes,
-  ChartSeries,
-  MouseState,
-  PanOrigin,
-} from "./types";
 import { _clampView } from "./_clampView";
 import { ChartEngineApi } from "../api/types";
+import {
+  ChartEngineCore,
+  type ChartPanes,
+  type ChartSeries,
+  type MouseState,
+  type PanOrigin,
+} from "./types";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -56,6 +55,9 @@ import { ChartEngineApi } from "../api/types";
 
 export class ChartEngine {
   public options: ChartOptions;
+
+  public core: ChartEngineCore;
+
   public utils: any;
   public api: ChartEngineApi;
   public area: HTMLElement;
@@ -269,6 +271,8 @@ export class ChartEngine {
   constructor(area: HTMLElement) {
     this.options = { ...DEFAULT_OPTIONS };
 
+    this.core = new ChartEngineCore(this);
+
     this.utils = {
       _xOf: _xOf.bind(this),
       _yOf: _yOf.bind(this),
@@ -327,39 +331,15 @@ export class ChartEngine {
   }
 
   _init() {
-    _loadCssVariables(this);
-    _buildLayout(this);
-    _grabCanvases(this);
-    _resize(this);
-    _bindEvents(this);
-    _startLoop(this);
+    this.core.loadCssVariables();
+    this.core.buildLayout();
+    this.core.grabCanvases();
+    this.core.resize();
+    this.core.bindEvents();
+    this.core.startLoop();
   }
 
   get data() {
     return this._series.values().next().value?.data || [];
-  }
-
-  /**
-   * Resets the visible viewport to fit the current primary series.
-   *
-   * By default, the viewport is aligned to the most recent data.
-   */
-  public resetViewport(): void {
-    const data = this.data;
-
-    if (!data?.length) {
-      this.viewStart = 0;
-      this.viewEnd = 0;
-      return;
-    }
-
-    const capacity = Math.max(1, Math.floor(this.chartW / this.barWidth));
-
-    this.viewEnd = data.length + this.rightPadBars;
-    this.viewStart = Math.max(0, this.viewEnd - capacity);
-
-    _clampView(this);
-
-    this.dirty = true;
   }
 }

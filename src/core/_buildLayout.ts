@@ -10,7 +10,6 @@ import type { ChartEngine } from "../core/chartEngine";
  * - Legend and indicators containers
  * - Debug/status bar
  *
- * Returns `true` when the layout is successfully created.
  */
 export function _buildLayout(engine: ChartEngine) {
   const chartArea = engine.area;

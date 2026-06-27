@@ -23,7 +23,7 @@ import { _clampView } from "./_clampView";
  * - Time canvas: bottom time scale.
  * - Price scale canvas: right-side price axis.
  */
-export function _resize(engine: ChartEngine) {
+export function _resize(engine: ChartEngine): void {
   const dpr: number = window.devicePixelRatio || 1;
 
   /**

@@ -4,7 +4,7 @@ import type { ChartEngine } from "../core/chartEngine";
  * Retrieves all chart DOM elements and initializes their
  * corresponding 2D rendering contexts.
  */
-export function _grabCanvases(engine: ChartEngine) {
+export function _grabCanvases(engine: ChartEngine): void {
   const a = engine.area;
 
   // CANVAS

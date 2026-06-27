@@ -1,9 +1,9 @@
-import { SCROLL_ZOOM_FACTOR, MIN_BAR_W, MAX_BAR_W } from "../core/config";
-import { _resize } from "../core/_resize";
-import { _clampView } from "../core/_clampView";
+import { SCROLL_ZOOM_FACTOR, MIN_BAR_W, MAX_BAR_W } from "./config";
+import { _resize } from "./_resize";
+import { _clampView } from "./_clampView";
 import { _updateScrollThumb } from "../ui/_updateScrollThumb";
 import { _updateStatusBar } from "../ui/_updateStatusBar";
-import type { ChartEngine } from "../core/chartEngine";
+import type { ChartEngine } from "./chartEngine";
 
 /**
  * Registers all user interaction and lifecycle event handlers

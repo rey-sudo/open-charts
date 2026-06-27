@@ -1,5 +1,12 @@
 import { _clampView } from "../_clampView";
+import { _loadCssVariables } from "../_loadCssVariables";
 import type { ChartEngine } from "../chartEngine";
+import { _resetViewport } from "../_resetViewport";
+import { _buildLayout } from "../_buildLayout";
+import { _grabCanvases } from "../_grabCanvases";
+import { _resize } from "../_resize";
+import { _bindEvents } from "../_bindEvents";
+import { _startLoop } from "../_startLoop";
 
 /**
  * Pane with geometry only.
@@ -147,7 +154,7 @@ export class ChartSeries {
       this.values = this.def.compute(data);
     }
 
-    this.engine.resetViewport();
+    this.engine.core.resetViewport();
     this.engine.hasData = true;
     this.engine.dirty = true;
 
@@ -193,5 +200,101 @@ export class ChartSeries {
     this.engine._series.delete(this.def.id);
     this.engine.dirty = true;
     this.engine.hasData = false;
+  }
+}
+
+/**
+ * Core API.
+ */
+export class ChartEngineCore {
+  constructor(private readonly engine: ChartEngine) {}
+
+  /**
+   * Adds a new series to the chart.
+   *
+   * @param def Series definition.
+   * @returns The created series.
+   */
+  public resetViewport(): void {
+    _resetViewport(this.engine);
+  }
+
+  /**
+   * Applies configured color values as CSS custom properties
+   * on the document root element.
+   */
+  public loadCssVariables(): void {
+    _loadCssVariables(this.engine);
+  }
+
+  /**
+   * Builds and injects the chart DOM structure into the container.
+   *
+   * The layout includes:
+   * - Main chart pane and rendering canvases
+   * - Time axis
+   * - Horizontal scrollbar
+   * - Legend and indicators containers
+   * - Debug/status bar
+   *
+   */
+  public buildLayout(): void {
+    _buildLayout(this.engine);
+  }
+
+  /**
+   * Retrieves all chart DOM elements and initializes their
+   * corresponding 2D rendering contexts.
+   */
+  public grabCanvases(): void {
+    _grabCanvases(this.engine);
+  }
+
+  /**
+   * Resizes and reconfigures all chart canvases to match the current
+   * layout dimensions and device pixel ratio (DPR).
+   *
+   * This method:
+   * - Synchronizes canvas backing-store resolution with CSS dimensions.
+   * - Applies HiDPI scaling for crisp rendering on Retina displays.
+   * - Resets canvas transforms to prevent accumulated scaling.
+   * - Updates pane geometry for the main chart, price scale, and time axis.
+   * - Recalculates the available chart width.
+   * - Marks rendering layers as dirty for a full redraw.
+   * - Clamps the current viewport and updates the scroll thumb.
+   *
+   * Canvas layers:
+   * - Main canvas: price series and indicators.
+   * - Overlay canvas: crosshair, hover states, and interactive elements.
+   * - Drawings canvas: user annotations and drawing tools.
+   * - Time canvas: bottom time scale.
+   * - Price scale canvas: right-side price axis.
+   */
+  public resize(): void {
+    _resize(this.engine);
+  }
+
+  /**
+   * Registers all user interaction and lifecycle event handlers
+   * required by the chart, including mouse, touch, scrolling,
+   * zooming, panning, scrollbar dragging, and window resizing.
+   */
+  public bindEvents(): void {
+    _bindEvents(this.engine);
+  }
+
+  /**
+   * Starts the chart render loop.
+   *
+   * The loop runs continuously using `requestAnimationFrame` and
+   * redraws only the layers that have been marked as dirty.
+   *
+   * Rendering is split into independent passes:
+   * - Main chart
+   * - Drawings
+   * - Overlay
+   */
+  public startLoop(): void {
+    _startLoop(this.engine);
   }
 }
