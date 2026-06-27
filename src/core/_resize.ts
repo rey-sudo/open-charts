@@ -4,6 +4,42 @@ import type { ChartEngine } from "./chartEngine";
 import { _clampView } from "./_clampView";
 
 /**
+ * Configures a canvas for HiDPI rendering to ensure sharp,
+ * pixel-perfect graphics on high-density displays.
+ *
+ * @param {HTMLCanvasElement} canvas Target canvas element.
+ * @param {HTMLElement} container Container used to determine dimensions.
+ */
+const setCanvas = (
+  canvas: HTMLCanvasElement,
+  container: HTMLElement,
+  dpr: number,
+) => {
+  // Get the container's current layout dimensions.
+  const r: DOMRect = container.getBoundingClientRect();
+
+  // Compute the physical canvas width / height using the current DPR.
+  const w: number = Math.ceil(r.width * dpr);
+  const h: number = Math.ceil(r.height * dpr);
+
+  // Set the canvas backing-store width / height in physical pixels.
+  canvas.width = w;
+  canvas.height = h;
+
+  // Preserve the intended visual width / height in CSS pixels.
+  canvas.style.width = w / dpr + "px";
+  canvas.style.height = h / dpr + "px";
+
+  // Scale the rendering context to match DPR coordinates.
+  const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
+
+  if (ctx) {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.scale(dpr, dpr);
+  }
+};
+
+/**
  * Resizes and reconfigures all chart canvases to match the current
  * layout dimensions and device pixel ratio (DPR).
  *
@@ -26,38 +62,6 @@ import { _clampView } from "./_clampView";
 export function _resize(engine: ChartEngine): void {
   const dpr: number = window.devicePixelRatio || 1;
 
-  /**
-   * Configures a canvas for HiDPI rendering to ensure sharp,
-   * pixel-perfect graphics on high-density displays.
-   *
-   * @param {HTMLCanvasElement} canvas Target canvas element.
-   * @param {HTMLElement} container Container used to determine dimensions.
-   */
-  const setCanvas = (canvas: HTMLCanvasElement, container: HTMLElement) => {
-    // Get the container's current layout dimensions.
-    const r: DOMRect = container.getBoundingClientRect();
-
-    // Compute the physical canvas width / height using the current DPR.
-    const w: number = Math.ceil(r.width * dpr);
-    const h: number = Math.ceil(r.height * dpr);
-
-    // Set the canvas backing-store width / height in physical pixels.
-    canvas.width = w;
-    canvas.height = h;
-
-    // Preserve the intended visual width / height in CSS pixels.
-    canvas.style.width = w / dpr + "px";
-    canvas.style.height = h / dpr + "px";
-
-    // Scale the rendering context to match DPR coordinates.
-    const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
-
-    if (ctx) {
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
-    }
-  };
-
   // Main chart pane-main container.
   const pMain: HTMLElement = engine.paneMainEl;
 
@@ -65,16 +69,16 @@ export function _resize(engine: ChartEngine): void {
   const tAxis: HTMLElement = engine.timeAxisEl;
 
   // Resize chart rendering layers.
-  setCanvas(engine.cMain, pMain);
+  setCanvas(engine.cMain, pMain, dpr);
 
   // Reset and resize overlay layer.
-  setCanvas(engine.oMain, pMain);
+  setCanvas(engine.oMain, pMain, dpr);
 
   // Resize drawings layer.
-  setCanvas(engine.cDrawings, pMain);
+  setCanvas(engine.cDrawings, pMain, dpr);
 
   // Resize time-axis layer.
-  setCanvas(engine.cTime, tAxis);
+  setCanvas(engine.cTime, tAxis, dpr);
 
   // Read updated layout dimensions.
   const mainR: DOMRect = pMain.getBoundingClientRect();
