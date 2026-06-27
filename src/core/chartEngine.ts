@@ -41,30 +41,14 @@ import { _recomputeSeries } from "../core/_recomputeSeries";
 import { _updateLegend } from "../ui/_updateLegend";
 import { _isDifferentBar } from "../utils/_isDifferentBar";
 import { _updateSeriesIncremental } from "../core/_updateSeriesIncremental";
-import { applyOptions } from "../api/applyOptions";
-import { setData } from "../api/setData";
-import { destroy } from "../api/detroy";
-import { update } from "../api/update";
-import { addSeries } from "../api/addSeries";
-import { removeSeries } from "../api/removeSeries";
-import { toggleSeries } from "../api/toggleSeries";
-import { enableSeries } from "../api/enableSeries";
-import { disableSeries } from "../api/disableSeries";
-import { isSeriesEnabled } from "../api/isSeriesEnabled";
-import { getSeries } from "../api/getSeries";
-import { setSeriesParam } from "../api/setSeriesParam";
-import { setSeriesParams } from "../api/setSeriesParams";
-import { getSeriesParams } from "../api/getSeriesParams";
-import { resetZoom } from "../api/resetZoom";
-import { addDrawingModule } from "../api/addDrawingModule";
 import type {
   ChartPanes,
   ChartSeries,
   MouseState,
   PanOrigin,
-  SeriesDefinition,
 } from "./types/engine";
 import { _clampView } from "./_clampView";
+import { ChartEngineApi } from "../api/types";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -73,7 +57,7 @@ import { _clampView } from "./_clampView";
 export class ChartEngine {
   public options: ChartOptions;
   public utils: any;
-  public api: any;
+  public api: ChartEngineApi;
   public area: HTMLElement;
 
   public hasData: boolean;
@@ -291,23 +275,7 @@ export class ChartEngine {
       _indexAtX: _indexAtX.bind(this),
     };
 
-    this.api = {
-      setData: setData.bind(this),
-      applyOptions: applyOptions.bind(this),
-      destroy: destroy.bind(this),
-      update: update.bind(this),
-      removeSeries: removeSeries.bind(this),
-      toggleSeries: toggleSeries.bind(this),
-      enableSeries: enableSeries.bind(this),
-      disableSeries: disableSeries.bind(this),
-      isSeriesEnabled: isSeriesEnabled.bind(this),
-      getSeries: getSeries.bind(this),
-      setSeriesParam: setSeriesParam.bind(this),
-      setSeriesParams: setSeriesParams.bind(this),
-      getSeriesParams: getSeriesParams.bind(this),
-      resetZoom: resetZoom.bind(this),
-      addDrawingModule: addDrawingModule.bind(this),
-    };
+    this.api = new ChartEngineApi(this);
 
     this.area = area;
 
@@ -369,10 +337,6 @@ export class ChartEngine {
 
   get data() {
     return this._series.values().next().value?.data || [];
-  }
-
-  addSeries(def: SeriesDefinition) {
-    return addSeries(this, def);
   }
 
   /**
