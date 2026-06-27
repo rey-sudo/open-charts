@@ -64,6 +64,7 @@ import type {
   PanOrigin,
   SeriesDefinition,
 } from "./types/engine";
+import { _clampView } from "./_clampView";
 
 //--------------------------------------------------------------------------------------------------------------------
 //  CHART ENGINE
@@ -372,5 +373,29 @@ export class ChartEngine {
 
   addSeries(def: SeriesDefinition) {
     return addSeries(this, def);
+  }
+
+  /**
+   * Resets the visible viewport to fit the current primary series.
+   *
+   * By default, the viewport is aligned to the most recent data.
+   */
+  public resetViewport(): void {
+    const data = this.data;
+
+    if (!data?.length) {
+      this.viewStart = 0;
+      this.viewEnd = 0;
+      return;
+    }
+
+    const capacity = Math.max(1, Math.floor(this.chartW / this.barWidth));
+
+    this.viewEnd = data.length + this.rightPadBars;
+    this.viewStart = Math.max(0, this.viewEnd - capacity);
+
+    _clampView(this);
+
+    this.dirty = true;
   }
 }

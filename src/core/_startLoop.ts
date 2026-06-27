@@ -49,11 +49,5 @@ export function _startLoop(engine: ChartEngine) {
     }
   };
 
-  // Ensure viewport constraints remain valid.
-  //_clampView(engine);
-
-  // Recalculate scrollbar thumb size and position.
-  //_updateScrollThumb(engine);
-
   engine._rafId = requestAnimationFrame(loop);
 }

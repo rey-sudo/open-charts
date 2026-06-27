@@ -147,13 +147,7 @@ export class ChartSeries {
       this.values = this.def.compute(data);
     }
 
-    const capacity = Math.floor(this.engine.chartW / this.engine.barWidth);
-
-    this.engine.viewEnd = data.length + this.engine.rightPadBars;
-    this.engine.viewStart = Math.max(0, this.engine.viewEnd - capacity);
-
-    _clampView(this.engine); 
-
+    this.engine.resetViewport();
     this.engine.hasData = true;
     this.engine.dirty = true;
 
