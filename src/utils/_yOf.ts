@@ -1,3 +1,5 @@
+import type { ChartPane } from "../core/types";
+
 /**
  * Converts a price value into its corresponding Y pixel coordinate
  * within a chart pane.
@@ -15,7 +17,7 @@
  */
 export function _yOf(
   price: number,
-  pane: any,
+  pane: ChartPane,
   priceMin: number,
   priceMax: number,
 ): number {

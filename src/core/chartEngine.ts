@@ -59,7 +59,7 @@ export class ChartEngine {
 
   public core: ChartEngineCore;
 
-  public utils: any;
+  public utils: ChartEngineUtils;
   public api: ChartEngineApi;
   public area: HTMLElement;
 

@@ -1,4 +1,5 @@
 import type { ChartEngine } from "../../core/chartEngine";
+import type { ChartPane } from "../../core/types";
 import { _indexAtX } from "../_indexAtX";
 import { _xOf } from "../_xOf";
 import { _yOf } from "../_yOf";
@@ -41,7 +42,7 @@ export class ChartEngineUtils {
    */
   public yOf(
     price: number,
-    pane: any,
+    pane: ChartPane,
     priceMin: number,
     priceMax: number,
   ): number {

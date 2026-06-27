@@ -49,6 +49,8 @@ export interface ChartPanes {
   time: TimePane;
 }
 
+export type ChartPane = RenderPane | ScalePane | TimePane;
+
 /**
  * Current mouse state.
  */
