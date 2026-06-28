@@ -1,7 +1,5 @@
-import { _clampView } from "../_clampView";
 import { _loadCssVariables } from "../_loadCssVariables";
 import type { ChartEngine } from "../chartEngine";
-import { _resetViewport } from "../_resetViewport";
 import { _buildLayout } from "../_buildLayout";
 import { _grabCanvases } from "../_grabCanvases";
 import { _resize } from "../_resize";
@@ -156,7 +154,7 @@ export class ChartSeries {
       this.values = this.def.compute(data);
     }
 
-    this.engine.core.resetViewport();
+    this.engine.timeScale.resetViewport();
     this.engine.hasData = true;
     this.engine.dirty = true;
 
@@ -210,19 +208,6 @@ export class ChartSeries {
  */
 export class ChartCore {
   constructor(private readonly engine: ChartEngine) {}
-
-  /**
-   * Resets the viewport to the default position.
-   *
-   * This function is typically called after loading a new dataset or
-   * whenever the chart should display the most recent bars.
-   *
-   * The viewport is positioned at the end of the available data, then
-   * clamped to ensure it satisfies the current chart constraints.
-   */
-  public resetViewport(): void {
-    _resetViewport(this.engine);
-  }
 
   /**
    * Applies configured color values as CSS custom properties
@@ -294,5 +279,4 @@ export class ChartCore {
   public startLoop(): void {
     _startLoop(this.engine);
   }
-
 }

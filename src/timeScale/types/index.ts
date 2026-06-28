@@ -1,4 +1,5 @@
-import { _clampView } from "../../core/_clampView";
+import { _clampView } from "../../timeScale/_clampView";
+import { _resetViewport } from "../../timeScale/_resetViewport";
 import type { ChartEngine } from "../../core/chartEngine";
 
 /**
@@ -27,5 +28,18 @@ export class ChartTimeScale {
    */
   public clampView(): void {
     _clampView(this.engine);
+  }
+
+  /**
+   * Resets the viewport to the default position.
+   *
+   * This function is typically called after loading a new dataset or
+   * whenever the chart should display the most recent bars.
+   *
+   * The viewport is positioned at the end of the available data, then
+   * clamped to ensure it satisfies the current chart constraints.
+   */
+  public resetViewport(): void {
+    _resetViewport(this.engine);
   }
 }

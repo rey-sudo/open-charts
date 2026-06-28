@@ -39,7 +39,6 @@ import { _recomputeSeries } from "../core/_recomputeSeries";
 import { _updateLegend } from "../ui/_updateLegend";
 import { _isDifferentBar } from "../utils/_isDifferentBar";
 import { _updateSeriesIncremental } from "../core/_updateSeriesIncremental";
-import { _clampView } from "./_clampView";
 import { ChartApi } from "../api/types";
 import {
   ChartCore,

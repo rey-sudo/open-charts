@@ -1,6 +1,5 @@
 import { SCROLL_ZOOM_FACTOR, MIN_BAR_W, MAX_BAR_W } from "./config";
 import { _resize } from "./_resize";
-import { _clampView } from "./_clampView";
 import { _updateScrollThumb } from "../ui/_updateScrollThumb";
 import { _updateStatusBar } from "../ui/_updateStatusBar";
 import type { ChartEngine } from "./chartEngine";
@@ -17,7 +16,6 @@ export function _bindEvents(engine: ChartEngine) {
   area.addEventListener(
     "mousemove",
     (e: any) => {
-    
       if (!engine.hasData) return;
 
       // Update the current mouse position and mark it as inside the chart.
@@ -50,7 +48,7 @@ export function _bindEvents(engine: ChartEngine) {
         engine.viewEnd = engine.viewStart + capacity;
 
         // Ensure the visible range remains within valid bounds.
-        _clampView(engine);
+        engine.timeScale.clampView();
 
         // Mark the main chart layer for redraw.
         engine.dirty = true;
@@ -167,7 +165,7 @@ export function _bindEvents(engine: ChartEngine) {
       engine.viewEnd = engine.viewStart + capacity;
 
       // Clamp viewport to valid data bounds.
-      _clampView(engine);
+      engine.timeScale.clampView();
 
       // Mark chart for redraw.
       engine.dirty = true;
@@ -231,7 +229,7 @@ export function _bindEvents(engine: ChartEngine) {
         engine.viewEnd = engine.viewStart + capacity;
 
         // Ensure viewport stays within valid data bounds.
-        _clampView(engine);
+        engine.timeScale.clampView();
 
         // Mark chart for redraw.
         engine.dirty = true;
@@ -259,7 +257,7 @@ export function _bindEvents(engine: ChartEngine) {
 
         const capacity = Math.floor(engine.chartW / engine.barWidth);
         engine.viewEnd = engine.viewStart + capacity;
-        _clampView(engine);
+        engine.timeScale.clampView();
 
         engine.dirty = true;
         _updateScrollThumb(engine);
@@ -337,7 +335,7 @@ export function _bindEvents(engine: ChartEngine) {
       );
 
       // Ensure the viewport remains within valid bounds.
-      _clampView(engine);
+      engine.timeScale.clampView();
 
       // Mark the chart for redraw.
       engine.dirty = true;
