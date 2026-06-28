@@ -55,17 +55,25 @@ import { ChartTimeScale } from "../timeScale/types";
 //--------------------------------------------------------------------------------------------------------------------
 
 export class ChartEngine {
+  /** Chart configuration options. */
   public options: ChartOptions;
 
+  /** Internal engine operations and lifecycle methods. */
   public core: ChartCore;
 
+  /** Shared utility helpers used by the engine. */
   public utils: ChartUtils;
+
+  /** Public API exposed to library consumers. */
   public api: ChartApi;
 
+  /** Horizontal time scale and viewport management. */
   public timeScale: ChartTimeScale;
 
+  /** Root HTML element that hosts the chart. */
   public area: HTMLElement;
 
+  /** Indicates whether the chart currently contains any data. */
   public hasData: boolean;
 
   /**

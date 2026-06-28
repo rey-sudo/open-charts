@@ -1,5 +1,5 @@
 import type { ChartEngine } from "../src/core/chartEngine";
-import type { RenderPane, SeriesDefinition } from "../src/core/types";
+import type { MainPane, SeriesDefinition } from "../src/core/types";
 
 export const CandlestickSeries: SeriesDefinition = {
   id: "candlestick",
@@ -23,7 +23,7 @@ export const CandlestickSeries: SeriesDefinition = {
 
   render(
     ctx: CanvasRenderingContext2D,
-    pane: RenderPane,
+    pane: MainPane,
     engine: ChartEngine,
     data: any,
     values: any[], // Mapeado a la estructura de datos OHLC

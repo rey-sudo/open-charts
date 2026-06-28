@@ -19,7 +19,7 @@ export interface TimePane {
 /**
  * Pane that owns a rendering canvas.
  */
-export interface RenderPane extends TimePane {
+export interface MainPane extends TimePane {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   oCtx: CanvasRenderingContext2D;
@@ -38,7 +38,7 @@ export interface ScalePane {
  */
 export interface ChartPanes {
   /** Main chart pane. */
-  main: RenderPane;
+  main: MainPane;
 
   /** Right-side price scale. */
   scale: ScalePane;
@@ -47,7 +47,7 @@ export interface ChartPanes {
   time: TimePane;
 }
 
-export type ChartPane = RenderPane | ScalePane | TimePane;
+export type ChartPane = MainPane | ScalePane | TimePane;
 
 /**
  * Current mouse state.
@@ -97,7 +97,7 @@ export interface SeriesDefinition {
   /** Renders the indicator. */
   render(
     ctx: CanvasRenderingContext2D,
-    pane: RenderPane,
+    pane: MainPane,
     engine: ChartEngine,
     data: any,
     values: unknown[],
