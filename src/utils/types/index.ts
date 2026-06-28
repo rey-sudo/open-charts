@@ -7,7 +7,7 @@ import { _yOf } from "../_yOf";
 /**
  * Utils API exposed by the chart engine.
  */
-export class ChartEngineUtils {
+export class ChartUtils {
   constructor(private readonly engine: ChartEngine) {}
 
   /**

@@ -208,7 +208,7 @@ export class ChartSeries {
 /**
  * Core API.
  */
-export class ChartEngineCore {
+export class ChartCore {
   constructor(private readonly engine: ChartEngine) {}
 
   /**

@@ -40,15 +40,15 @@ import { _updateLegend } from "../ui/_updateLegend";
 import { _isDifferentBar } from "../utils/_isDifferentBar";
 import { _updateSeriesIncremental } from "../core/_updateSeriesIncremental";
 import { _clampView } from "./_clampView";
-import { ChartEngineApi } from "../api/types";
+import { ChartApi } from "../api/types";
 import {
-  ChartEngineCore,
+  ChartCore,
   type ChartPanes,
   type ChartSeries,
   type MouseState,
   type PanOrigin,
 } from "./types";
-import { ChartEngineUtils } from "../utils/types";
+import { ChartUtils } from "../utils/types";
 import { ChartTimeScale } from "../timeScale/types";
 
 //--------------------------------------------------------------------------------------------------------------------
@@ -58,10 +58,10 @@ import { ChartTimeScale } from "../timeScale/types";
 export class ChartEngine {
   public options: ChartOptions;
 
-  public core: ChartEngineCore;
+  public core: ChartCore;
 
-  public utils: ChartEngineUtils;
-  public api: ChartEngineApi;
+  public utils: ChartUtils;
+  public api: ChartApi;
 
   public timeScale: ChartTimeScale;
 
@@ -276,11 +276,11 @@ export class ChartEngine {
   constructor(area: HTMLElement) {
     this.options = { ...DEFAULT_OPTIONS };
 
-    this.core = new ChartEngineCore(this);
+    this.core = new ChartCore(this);
 
-    this.utils = new ChartEngineUtils(this);
+    this.utils = new ChartUtils(this);
 
-    this.api = new ChartEngineApi(this);
+    this.api = new ChartApi(this);
 
     this.timeScale = new ChartTimeScale(this);
 

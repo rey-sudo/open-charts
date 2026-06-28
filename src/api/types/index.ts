@@ -5,7 +5,7 @@ import { addSeries } from "../addSeries";
 /**
  * Public API exposed by the chart engine.
  */
-export class ChartEngineApi {
+export class ChartApi {
   constructor(private readonly engine: ChartEngine) {}
 
   /**
