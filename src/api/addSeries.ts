@@ -9,7 +9,7 @@ import { _updateLegend } from "../ui/_updateLegend";
  * independent from its original definition. If chart data is already
  * available, the indicator values are computed immediately.
  *
- * @param this Chart engine instance.
+ * @param engine Chart engine instance.
  * @param def Indicator definition.
  * @returns The chart instance for method chaining.
  */
