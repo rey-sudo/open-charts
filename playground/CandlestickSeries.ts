@@ -50,12 +50,12 @@ export const CandlestickSeries: SeriesDefinition = {
 
       // Conversión de coordenadas usando los métodos del engine
       const x = Math.round(engine.utils.xOf(i));
-      const yH = Math.round(engine.utils.yOf(d.h, pane, priceMin, priceMax));
-      const yL = Math.round(engine.utils.yOf(d.l, pane, priceMin, priceMax));
-      const yO = Math.round(engine.utils.yOf(d.o, pane, priceMin, priceMax));
-      const yC = Math.round(engine.utils.yOf(d.c, pane, priceMin, priceMax));
+      const yH = Math.round(engine.utils.yOf(d.high, pane, priceMin, priceMax));
+      const yL = Math.round(engine.utils.yOf(d.low, pane, priceMin, priceMax));
+      const yO = Math.round(engine.utils.yOf(d.open, pane, priceMin, priceMax));
+      const yC = Math.round(engine.utils.yOf(d.close, pane, priceMin, priceMax));
 
-      const bull = d.c >= d.o;
+      const bull = d.close >= d.open;
       const col = bull ? bullCol : bearCol;
 
       // --- Dibujo de las Mechas (Wicks) ---
@@ -111,14 +111,14 @@ export const CandlestickSeries: SeriesDefinition = {
     const d = values[i];
     if (!d) return null;
 
-    const bull = d.c >= d.o;
+    const bull = d.close >= d.open;
     const col = bull
       ? (this.params?.bullColor?.value ?? "#00c87a")
       : (this.params?.bearColor?.value ?? "#ff4060");
 
     return {
       label: "OHLC",
-      value: `O:${d.o.toFixed(2)} H:${d.h.toFixed(2)} L:${d.l.toFixed(2)} C:${d.c.toFixed(2)}`,
+      value: `O:${d.open.toFixed(2)} H:${d.high.toFixed(2)} L:${d.low.toFixed(2)} C:${d.close.toFixed(2)}`,
       color: col,
     };
   },

@@ -55,12 +55,12 @@ function generateCandles(
 
 function normalizeCandles(candles: any) {
   return candles.map((candle: any) => ({
-    t: Math.floor(candle.start_ts / 1000), // timestamp en segundos
-    o: Number(candle.open),
-    h: Number(candle.high),
-    l: Number(candle.low),
-    c: Number(candle.close),
-    v: Number(candle.volume),
+    time: Math.floor(candle.start_ts / 1000), // timestamp en segundos
+    open: Number(candle.open),
+    high: Number(candle.high),
+    low: Number(candle.low),
+    close: Number(candle.close),
+    volume: Number(candle.volume),
   }));
 }
 
@@ -89,7 +89,6 @@ const candles = chart.api.addSeries(CandlestickSeries);
 
 candles.setData(normalizeCandles(fakeData));
 
+//const MAseries = chart.api.addSeries(MovingAverageSeries);
 
-const MAseries = chart.api.addSeries(MovingAverageSeries);
-
-MAseries.setData(normalizeCandles(fakeData));
+//MAseries.setData(normalizeCandles(fakeData));

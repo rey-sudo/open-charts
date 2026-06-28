@@ -40,8 +40,8 @@ export function _renderPriceScale(
   if (!engine.hasData) return;
   const last: any = engine.data[engine.data.length - 1];
 
-  const y = engine.utils.yOf(last.c, p, priceMin, priceMax);
-  const bull = last.c >= last.o;
+  const y = engine.utils.yOf(last.close, p, priceMin, priceMax);
+  const bull = last.close >= last.open;
   ctx.fillStyle = bull
     ? engine.options.colors.bull
     : engine.options.colors.bear;
@@ -49,5 +49,5 @@ export function _renderPriceScale(
   ctx.fillStyle = "#050810";
   ctx.font = "10px Inter, sans-serif";
   ctx.textAlign = "center";
-  ctx.fillText(last.c.toFixed(2), W / 2, y + 3.5);
+  ctx.fillText(last.close.toFixed(2), W / 2, y + 3.5);
 }

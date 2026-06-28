@@ -30,6 +30,6 @@ export function _renderTimeAxis(engine: ChartEngine) {
     if (!_isTimeGridLine.call(engine, i, step)) continue;
     const x = engine.utils.xOf(i);
     if (x < 16 || x > cw - 16) continue;
-    ctx.fillText(_formatDate(data[i].t, step), x, 15);
+    ctx.fillText(_formatDate(data[i].time, step), x, 15);
   }
 }

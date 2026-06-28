@@ -18,8 +18,8 @@ export function _visiblePriceRange(engine: ChartEngine) {
     const bar: any = data[i];
     if (!bar) continue;
 
-    lo = Math.min(lo, bar.l);
-    hi = Math.max(hi, bar.h);
+    lo = Math.min(lo, bar.low);
+    hi = Math.max(hi, bar.high);
   }
 
   // Let enabled series extend the visible price range
