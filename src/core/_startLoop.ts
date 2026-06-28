@@ -2,7 +2,7 @@ import { _renderDrawingModules } from "../render/_renderDrawingModules";
 import { _renderOverlay } from "../render/_renderOverlay";
 import type { ChartEngine } from "./chartEngine";
 import { _render } from "../render/_render";
-import { _updateScrollThumb } from "../ui/_updateScrollThumb";
+import { _updateScrollThumb } from "../timeScale/_updateScrollThumb";
 
 /**
  * Starts the chart render loop.

@@ -1,6 +1,6 @@
 import { PRICE_SCALE_W } from "./config";
 import type { ChartEngine } from "./chartEngine";
-import { _updateScrollThumb } from "../ui/_updateScrollThumb";
+import { _updateScrollThumb } from "../timeScale/_updateScrollThumb";
 
 /**
  * Configures a canvas for HiDPI rendering.

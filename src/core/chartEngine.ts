@@ -24,7 +24,7 @@ import { _loadCssVariables } from "../core/_loadCssVariables";
 import { _resize } from "../core/_resize";
 import { _bindEvents } from "./_bindEvents";
 import { _startLoop } from "../core/_startLoop";
-import { _updateScrollThumb } from "../ui/_updateScrollThumb";
+import { _updateScrollThumb } from "../timeScale/_updateScrollThumb";
 import { _updateStatusBar } from "../ui/_updateStatusBar";
 import { _visiblePriceRange } from "../core/_visiblePriceRange";
 import { _renderMain } from "../render/_renderMain";

@@ -6,7 +6,7 @@ import {
   MIN_BAR_W,
   MAX_BAR_W,
 } from "../core/config";
-import { _updateScrollThumb } from "../ui/_updateScrollThumb";
+import { _updateScrollThumb } from "../timeScale/_updateScrollThumb";
 import { _updateStatusBar } from "../ui/_updateStatusBar";
 
 export function resetZoom() {

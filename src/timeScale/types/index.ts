@@ -1,6 +1,7 @@
 import { _clampView } from "../../timeScale/_clampView";
 import { _resetViewport } from "../../timeScale/_resetViewport";
 import type { ChartEngine } from "../../core/chartEngine";
+import { _updateScrollThumb } from "../_updateScrollThumb";
 
 /**
  * Utils API exposed by the chart engine.
@@ -41,5 +42,14 @@ export class ChartTimeScale {
    */
   public resetViewport(): void {
     _resetViewport(this.engine);
+  }
+
+  /**
+   * Updates the scrollbar thumb size and position to reflect
+   * the current visible range relative to the total scrollable
+   * data range, including right-side padding.
+   */
+  public updateScrollThumb(): void {
+    _updateScrollThumb(this.engine);
   }
 }

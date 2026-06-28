@@ -1,6 +1,6 @@
 import { SCROLL_ZOOM_FACTOR, MIN_BAR_W, MAX_BAR_W } from "./config";
 import { _resize } from "./_resize";
-import { _updateScrollThumb } from "../ui/_updateScrollThumb";
+import { _updateScrollThumb } from "../timeScale/_updateScrollThumb";
 import { _updateStatusBar } from "../ui/_updateStatusBar";
 import type { ChartEngine } from "./chartEngine";
 
@@ -54,7 +54,7 @@ export function _bindEvents(engine: ChartEngine) {
         engine.dirty = true;
 
         // Synchronize the scrollbar thumb with the new viewport.
-        _updateScrollThumb(engine);
+        engine.timeScale.updateScrollThumb();
 
         // Refresh status information displayed to the user.
         _updateStatusBar(engine);
@@ -171,7 +171,7 @@ export function _bindEvents(engine: ChartEngine) {
       engine.dirty = true;
 
       // Sync scrollbar thumb with new viewport.
-      _updateScrollThumb(engine);
+      engine.timeScale.updateScrollThumb();
 
       // Update UI status indicators.
       _updateStatusBar(engine);
@@ -235,7 +235,7 @@ export function _bindEvents(engine: ChartEngine) {
         engine.dirty = true;
 
         // Update scrollbar thumb position.
-        _updateScrollThumb(engine);
+        engine.timeScale.updateScrollThumb();
       }
 
       // TWO FINGERS: pinch zoom — reemplazar este bloque
@@ -260,7 +260,7 @@ export function _bindEvents(engine: ChartEngine) {
         engine.timeScale.clampView();
 
         engine.dirty = true;
-        _updateScrollThumb(engine);
+        engine.timeScale.updateScrollThumb();
       }
 
       // Update last known touch positions for next move event.
@@ -341,7 +341,7 @@ export function _bindEvents(engine: ChartEngine) {
       engine.dirty = true;
 
       // Synchronize the scrollbar thumb position and size.
-      _updateScrollThumb(engine);
+      engine.timeScale.updateScrollThumb();
 
       // Refresh viewport-related status information.
       _updateStatusBar(engine);
