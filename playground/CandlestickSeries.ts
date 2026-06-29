@@ -1,7 +1,34 @@
 import type { ChartEngine } from "../src/core/chartEngine";
 import type { MainPane, SeriesDefinition } from "../src/core/types";
 
-export const CandlestickSeries: SeriesDefinition = {
+export interface OHLCV {
+  time: number;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+  volume: number;
+}
+
+export interface SeriesParameter<T> {
+  type: string;
+  label: string;
+  value: T;
+}
+
+export type SeriesParameters = Record<string, SeriesParameter<unknown>>;
+
+interface CandlestickParams {
+  bullColor: SeriesParameter<string>;
+  bearColor: SeriesParameter<string>;
+  showBodyDetails: SeriesParameter<boolean>;
+}
+
+export const CandlestickSeries: SeriesDefinition<
+  OHLCV,
+  OHLCV,
+  CandlestickParams
+> = {
   id: "candlestick",
   label: "Candlesticks",
   layer: "background", // Se suele renderizar atrás de los indicadores como las MA
@@ -32,9 +59,9 @@ export const CandlestickSeries: SeriesDefinition = {
     priceMax: number,
   ): void {
     // 1. Extraer configuraciones dinámicas de los params o usar defaults
-    const bullCol = this.params?.bullColor?.value ?? "#00c87a";
-    const bearCol = this.params?.bearColor?.value ?? "#ff4060";
-    const fancyFill = this.params?.showBodyDetails?.value ?? true;
+    const bullCol = this.params.bullColor.value ?? "#00c87a";
+    const bearCol = this.params.bearColor.value ?? "#ff4060";
+    const fancyFill = this.params.showBodyDetails.value ?? true;
 
     // 2. Extraer propiedades de dibujo desde el motor (engine)
     // Nota: Adapté 'this.barWidth' a 'engine.barWidth' (común en estas librerías)

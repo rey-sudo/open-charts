@@ -75,45 +75,55 @@ export interface PanOrigin {
   viewStart: number;
 }
 
-/**
- * Indicator definition.
- */
-export interface SeriesDefinition {
-  /** Unique indicator identifier. */
+export interface SeriesDefinition<
+  TData,
+  TValue,
+  TParams = Record<string, unknown>,
+  TTooltip = unknown,
+> {
+  /** Unique series identifier. */
   id: string;
 
-  /** UI label text */
+  /** Display label. */
   label: string;
 
-  /** Tag color */
+  /** Default series color. */
   color: string;
 
   /** Rendering layer. */
   layer: "background" | "foreground";
 
-  /** Display name. */
-  params: Record<string, any>;
+  /** Series parameters. */
+  params: TParams;
 
-  /** Recomputes the indicator values. */
-  compute(data: any): unknown[];
+  /** Computes indicator values from the source data. */
+  compute(data: readonly TData[]): TValue[];
 
-  /** Renders the indicator. */
+  /** Renders the series. */
   render(
     ctx: CanvasRenderingContext2D,
     pane: MainPane,
     engine: ChartEngine,
-    data: any,
-    values: unknown[],
+    data: readonly TData[],
+    values: readonly TValue[],
     priceMin: number,
     priceMax: number,
   ): void;
 
-  updateIncremental(values: any[], data: any[], isNewBar: boolean): void;
+  /** Updates the cached values incrementally. */
+  updateIncremental(
+    values: TValue[],
+    data: readonly TData[],
+    isNewBar: boolean,
+  ): void;
 
-  tooltipRow(values: any[], i: number): any;
+  /** Returns a tooltip row for the given index. */
+  tooltipRow(values: readonly TValue[], index: number): TTooltip | null;
 
-  lastValue?(data: unknown[], values: unknown[]): number | null;
+  /** Returns the last visible value for the price scale. */
+  lastValue?(data: readonly TData[], values: readonly TValue[]): number | null;
 
+  /** Optional price tag color. */
   priceTagColor?: string;
 }
 
@@ -123,28 +133,29 @@ export interface SeriesDefinition {
  * A series owns its data, computed values, parameters,
  * and exposes the public API used by consumers.
  */
-export class ChartSeries {
+export class ChartSeries<TData, TValue, TParams = Record<string, unknown>> {
   /** Indicator definition. */
-  public readonly def: SeriesDefinition;
+  public readonly def: SeriesDefinition<TData, TValue, TParams>;
 
   /** Source data for the series. */
-  public data: unknown[] = [];
+  public data: TData[] = [];
 
   /** Computed values used for rendering. */
-  public values: unknown[] = [];
+
+  public values: TValue[] = [];
 
   /** Whether the series is currently visible. */
-  public enabled = true;
+  public enabled: boolean = true;
 
   public interval: number = 0;
 
   /** User-defined series parameters. */
-  public params: Record<string, unknown>;
+  public params: TParams;
 
   constructor(
     private readonly engine: ChartEngine,
-    def: SeriesDefinition,
-    params: Record<string, unknown> = {},
+    def: SeriesDefinition<TData, TValue, TParams>,
+    params: TParams,
   ) {
     this.def = def;
     this.params = params;
@@ -178,26 +189,22 @@ export class ChartSeries {
    * @param data New data set.
    * @returns The series instance.
    */
-  public setData(data: unknown[]): this {
-    this.data = data;
+  public setData(data: readonly TData[]): void {
+    this.data = [...data];
 
-    if (this.def.compute) {
-      this.values = this.def.compute(data);
-    }
+    this.values = this.def.compute(data);
 
-    this.engine.hasData = true;
+    this.engine.hasData = data.length > 0;
+
+    if (!this.engine.hasData) return;
 
     this.interval = this.getInterval();
 
     this.engine.timeScale.resetViewport();
 
-    this.engine.hasData = true;
-
     this.engine.priceScale.updateLayout();
 
     this.engine.dirty = true;
-
-    return this;
   }
 
   /**
@@ -206,13 +213,14 @@ export class ChartSeries {
    * @param bar New bar.
    * @returns The series instance.
    */
-  public update(bar: unknown): this {
+  public update(bar: TData): boolean {
     this.data.push(bar);
 
-    if (this.def.compute) {
-      this.values = this.def.compute(this.data);
-    }
-    this.engine.hasData = true;
+    this.values = this.def.compute(this.data);
+
+    this.engine.hasData = this.data.length > 0;
+
+    if (!this.engine.hasData) return false;
 
     this.interval = this.getInterval();
 
@@ -222,7 +230,7 @@ export class ChartSeries {
 
     this.engine.dirty = true;
 
-    return this;
+    return true;
   }
 
   /**

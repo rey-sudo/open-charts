@@ -89,6 +89,6 @@ const candles = chart.api.addSeries(CandlestickSeries);
 
 candles.setData(normalizeCandles(fakeData));
 
-const MAseries = chart.api.addSeries(MovingAverageSeries);
+//const MAseries = chart.api.addSeries(MovingAverageSeries);
 
-MAseries.setData(normalizeCandles(fakeData));
+//MAseries.setData(normalizeCandles(fakeData));
