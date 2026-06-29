@@ -4,6 +4,11 @@ import { _nicePriceSteps } from "../utils/_nicePriceSteps";
 import { _drawPriceLine } from "./_drawPriceLine";
 import { _drawPriceTag } from "./_drawPriceTag";
 
+
+
+
+
+
 export function _renderPriceScale(
   engine: ChartEngine,
   priceMin: number,
@@ -18,7 +23,7 @@ export function _renderPriceScale(
   ctx.clearRect(0, 0, W, H);
 
   // Paint the background.
-  ctx.fillStyle = engine.options.colors.bg2;
+  ctx.fillStyle = engine.options.colors.bg;
   ctx.fillRect(0, 0, W, H);
 
   // Draw the left separator.
@@ -32,7 +37,7 @@ export function _renderPriceScale(
 
   // Draw price labels.
   ctx.fillStyle = engine.options.colors.textDim;
-  ctx.font = "10px Inter, sans-serif";
+  ctx.font = `${engine.options.fontSizeNormal} ${engine.options.fontFamily}`;
   ctx.textAlign = "right";
 
   const steps = _nicePriceSteps(priceMin, priceMax, 6);

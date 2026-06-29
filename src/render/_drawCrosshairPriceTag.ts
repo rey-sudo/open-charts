@@ -33,8 +33,8 @@ export function _drawCrosshairPriceTag(
   ctx.fillStyle = color;
   ctx.fillRect(X, y - H / 2, W, H);
 
-  ctx.fillStyle = engine.options.colors.bg;
-  ctx.font = "11px Inter, sans-serif";
+  ctx.fillStyle = engine.options.colors.text;
+  ctx.font = `${engine.options.fontSizeNormal} ${engine.options.fontFamily}`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
   ctx.fillText(price.toFixed(2), X + W / 2, y);

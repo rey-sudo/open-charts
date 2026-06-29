@@ -63,6 +63,10 @@ export interface ChartOptions {
   maxBarWidth: number;
   zoomFactor: number;
   colors: ChartColors;
+
+  fontSizeNormal: string;
+  fontSizeSmall: string;
+  fontFamily: string;
 }
 
 export const DEFAULT_OPTIONS: ChartOptions = {
@@ -71,6 +75,10 @@ export const DEFAULT_OPTIONS: ChartOptions = {
   minBarWidth: MIN_BAR_W,
   maxBarWidth: MAX_BAR_W,
   zoomFactor: SCROLL_ZOOM_FACTOR,
+
+  fontSizeNormal: "12px",
+  fontSizeSmall: "9px",
+  fontFamily: "Inter, sans-serif",
 
   colors: {
     bg: "#0F0F0F",
@@ -81,7 +89,7 @@ export const DEFAULT_OPTIONS: ChartOptions = {
     gridAlt: "rgba(42,42,42,0.6)",
 
     text: "#E4E4E7",
-    textDim: "#ffffff",
+    textDim: "#A1A1AA",
 
     bull: "#089981",
     bear: "#F23645",

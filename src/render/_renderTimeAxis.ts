@@ -32,8 +32,8 @@ export function _renderTimeAxis(engine: ChartEngine): void {
   // Determine the logical spacing between time labels.
   const step = _timeGridStep(engine);
 
-  ctx.fillStyle = "white";
-  ctx.font = "11px Inter, sans-serif";
+  ctx.fillStyle = engine.options.colors.textDim;
+  ctx.font = `${engine.options.fontSizeNormal} ${engine.options.fontFamily}`;
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 

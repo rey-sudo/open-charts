@@ -6,7 +6,7 @@ export const CandlestickSeries: SeriesDefinition = {
   label: "Candlesticks",
   layer: "background", // Se suele renderizar atrás de los indicadores como las MA
   color: "red",
-  priceTagColor: "red",
+  priceTagColor: "#F23645",
   params: {
     bullColor: { type: "color", label: "Bullish Color", value: "#00c87a" },
     bearColor: { type: "color", label: "Bearish Color", value: "#ff4060" },
