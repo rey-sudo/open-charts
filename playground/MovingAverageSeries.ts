@@ -38,8 +38,8 @@ export const MovingAverageSeries: SeriesDefinition = {
     const out: any[] = new Array(data?.length).fill(null);
     let sum = 0;
     for (let i = 0; i < data?.length; i++) {
-      sum += data[i].c;
-      if (i >= period) sum -= data[i - period].c;
+      sum += data[i].close;
+      if (i >= period) sum -= data[i - period].close;
       if (i >= period - 1) out[i] = sum / period;
     }
     return out;
@@ -82,7 +82,7 @@ export const MovingAverageSeries: SeriesDefinition = {
     if (n < period - 1) return;
 
     let sum = 0;
-    for (let j = n - period + 1; j <= n; j++) sum += data[j].c;
+    for (let j = n - period + 1; j <= n; j++) sum += data[j].close;
     values[n] = sum / period;
   },
 

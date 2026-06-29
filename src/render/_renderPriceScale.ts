@@ -1,53 +1,66 @@
 import type { ChartEngine } from "../core/chartEngine";
 import { PRICE_SCALE_W } from "../core/config";
 import { _nicePriceSteps } from "../utils/_nicePriceSteps";
+import { _drawPriceLine } from "./_drawPriceLine";
+import { _drawPriceTag } from "./_drawPriceTag";
 
 export function _renderPriceScale(
   engine: ChartEngine,
   priceMin: number,
   priceMax: number,
-) {
+): void {
   const ctx = engine.ctxPScale;
+  const pane = engine.panes.main;
   const W = PRICE_SCALE_W;
   const H = engine.panes.scale.h;
-  const p = engine.panes.main; // yOf necesita el pane main para el height
 
+  // Clear the previous frame.
   ctx.clearRect(0, 0, W, H);
 
-  // Fondo
+  // Paint the background.
   ctx.fillStyle = engine.options.colors.bg2;
   ctx.fillRect(0, 0, W, H);
 
-  // Línea separadora izquierda
+  // Draw the left separator.
   ctx.strokeStyle = engine.options.colors.grid;
   ctx.lineWidth = 1;
+
   ctx.beginPath();
   ctx.moveTo(0.5, 0);
   ctx.lineTo(0.5, H);
   ctx.stroke();
 
-  // Labels en cada grid step
-  const steps = _nicePriceSteps(priceMin, priceMax, 6);
+  // Draw price labels.
   ctx.fillStyle = engine.options.colors.textDim;
   ctx.font = "10px Inter, sans-serif";
   ctx.textAlign = "right";
+
+  const steps = _nicePriceSteps(priceMin, priceMax, 6);
+
   steps.forEach((price) => {
-    const y = Math.round(engine.utils.yOf(price, p, priceMin, priceMax)) + 0.5;
+    const y =
+      Math.round(engine.utils.yOf(price, pane, priceMin, priceMax)) + 0.5;
+
     ctx.fillText(price.toFixed(2), W - 8, y + 3.5);
   });
 
-  // Tag del último close — estático, no es el crosshair
-  if (!engine.hasData) return;
-  const last: any = engine.data[engine.data.length - 1];
+  // Draw the last price tag for every enabled series.
+  engine._series.forEach(({ def, enabled, data, values }) => {
+    if (!enabled || !def.lastValue) return;
 
-  const y = engine.utils.yOf(last.close, p, priceMin, priceMax);
-  const bull = last.close >= last.open;
-  ctx.fillStyle = bull
-    ? engine.options.colors.bull
-    : engine.options.colors.bear;
-  ctx.fillRect(1, y - 8, W - 2, 16);
-  ctx.fillStyle = "#050810";
-  ctx.font = "10px Inter, sans-serif";
-  ctx.textAlign = "center";
-  ctx.fillText(last.close.toFixed(2), W / 2, y + 3.5);
+    const price = def.lastValue(data, values);
+
+    if (price == null) return;
+
+    const color =
+      def.priceTagColor ??
+      engine.options.colors.accent ??
+      engine.options.colors.bull;
+
+    // Draw the horizontal guide line.
+    _drawPriceLine(engine, price, color, priceMin, priceMax);
+
+    // Draw the price tag.
+    _drawPriceTag(engine, ctx, price, color, priceMin, priceMax);
+  });
 }

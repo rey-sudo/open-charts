@@ -6,6 +6,7 @@ export const CandlestickSeries: SeriesDefinition = {
   label: "Candlesticks",
   layer: "background", // Se suele renderizar atrás de los indicadores como las MA
   color: "red",
+  priceTagColor: "red",
   params: {
     bullColor: { type: "color", label: "Bullish Color", value: "#00c87a" },
     bearColor: { type: "color", label: "Bearish Color", value: "#ff4060" },
@@ -53,7 +54,9 @@ export const CandlestickSeries: SeriesDefinition = {
       const yH = Math.round(engine.utils.yOf(d.high, pane, priceMin, priceMax));
       const yL = Math.round(engine.utils.yOf(d.low, pane, priceMin, priceMax));
       const yO = Math.round(engine.utils.yOf(d.open, pane, priceMin, priceMax));
-      const yC = Math.round(engine.utils.yOf(d.close, pane, priceMin, priceMax));
+      const yC = Math.round(
+        engine.utils.yOf(d.close, pane, priceMin, priceMax),
+      );
 
       const bull = d.close >= d.open;
       const col = bull ? bullCol : bearCol;
@@ -121,5 +124,10 @@ export const CandlestickSeries: SeriesDefinition = {
       value: `O:${d.open.toFixed(2)} H:${d.high.toFixed(2)} L:${d.low.toFixed(2)} C:${d.close.toFixed(2)}`,
       color: col,
     };
+  },
+
+  lastValue(data: any, values: any) {
+    const last = data.at(-1);
+    return last ? last.close : null;
   },
 };

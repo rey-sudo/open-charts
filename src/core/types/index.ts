@@ -110,6 +110,10 @@ export interface SeriesDefinition {
   updateIncremental(values: any[], data: any[], isNewBar: boolean): void;
 
   tooltipRow(values: any[], i: number): any;
+
+  lastValue?(data: unknown[], values: unknown[]): number | null;
+
+  priceTagColor?: string;
 }
 
 /**

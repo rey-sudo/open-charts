@@ -1,3 +1,8 @@
+//TODO: this not depends of the addSeries. This depends of main config of ChartEngine
+// SYMBOL
+// SYMBOL INFO
+// SYMBOL STATS
+
 export function _updateOHLCVlegend(d, i) {
   //----------------------------------------------------------
   const bull = d.close >= d.open;
