@@ -73,9 +73,9 @@ export const DEFAULT_OPTIONS: ChartOptions = {
   zoomFactor: SCROLL_ZOOM_FACTOR,
 
   colors: {
-    bg: "#1c1c1e",
-    bg2: "#262626",
-    bg3: "#2f2f2f",
+    bg: "#0F0F0F",
+    bg2: "#0F0F0F",
+    bg3: "#0F0F0F",
 
     grid: "rgba(42,42,42,0.5)",
     gridAlt: "rgba(42,42,42,0.6)",

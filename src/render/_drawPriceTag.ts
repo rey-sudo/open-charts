@@ -29,7 +29,7 @@ export function _drawPriceTag(
   ctx.fillRect(1, y - 8, PRICE_SCALE_W - 2, 16);
 
   // Draw the price label.
-  ctx.fillStyle = "#06216b";
+  ctx.fillStyle = "#ffffff";
   ctx.font = "11px Inter, sans-serif";
   ctx.textAlign = "center";
   ctx.fillText(price.toFixed(2), PRICE_SCALE_W / 2, y + 3.5);

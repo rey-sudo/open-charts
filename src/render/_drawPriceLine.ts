@@ -23,26 +23,15 @@ export function _drawPriceLine(
   const y = Math.round(engine.utils.yOf(price, pane, priceMin, priceMax)) + 0.5;
 
   ctx.save();
-
-  /**
-  ctx.strokeStyle = color;
-  ctx.lineWidth = 1;
-  ctx.setLineDash([3, 3]);
-
-  ctx.beginPath();
-  ctx.moveTo(0, y);
-  ctx.lineTo(engine.chartW, y);
-  ctx.stroke();
-
-  ctx.restore();
-   */
-
-  ctx.save();
-
   ctx.fillStyle = color;
 
-  for (let x = 0; x < engine.chartW; x += 6) {
-    ctx.fillRect(x, y, 2, 1);
+  const radius = 0.8;
+  const spacing = 6;
+
+  for (let x = 0; x <= engine.chartW; x += spacing) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
   }
 
   ctx.restore();
