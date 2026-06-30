@@ -97,7 +97,7 @@ small	12px
 }
 
 /* ── CHART AREA ── */
-#chart-area {
+.chart-area {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -222,7 +222,7 @@ canvas.pricescale-canvas {
   left: 1rem;
   z-index: 10;
   display: flex;
-  font-size: 13px;
+  font-size: 12px;
   position: absolute;
   pointer-events: none;
   flex-direction: column;

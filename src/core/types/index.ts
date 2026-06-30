@@ -127,6 +127,12 @@ export interface SeriesDefinition<
   priceTagColor?: string;
 }
 
+export type AnyChartSeries = ChartSeries<
+  unknown,
+  unknown,
+  Record<string, unknown>
+>;
+
 /**
  * Represents a chart series.
  *

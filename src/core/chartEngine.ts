@@ -41,8 +41,8 @@ import { _updateSeriesIncremental } from "../core/_updateSeriesIncremental";
 import { ChartApi } from "../api/types";
 import {
   ChartCore,
+  type AnyChartSeries,
   type ChartPanes,
-  type ChartSeries,
   type MouseState,
   type PanOrigin,
 } from "./types";
@@ -82,7 +82,7 @@ export class ChartEngine {
    * Series registry — populated via addSeries()
    * Map<id, { def, values, enabled }>
    */
-  public _series: Map<string, ChartSeries>;
+  public _series: Map<string, AnyChartSeries>;
 
   /**
    * Indicates whether the process is currently running.
@@ -296,7 +296,7 @@ export class ChartEngine {
 
     this.hasData = false;
 
-    this._series = new Map<string, ChartSeries>();
+    this._series = new Map<string, AnyChartSeries>();
 
     this._running = false;
 
