@@ -51,7 +51,7 @@
 
       /* Chrome / Edge / Safari */
       .chart-column::-webkit-scrollbar {
-        width: 6px;
+        width: 1rem;
       }
 
       .chart-column::-webkit-scrollbar-track {
@@ -60,7 +60,7 @@
 
       .chart-column::-webkit-scrollbar-thumb {
         background: transparent;
-        border-radius: 999px;
+        border-radius: 4px;
         transition: background 0.2s;
       }
 
@@ -78,6 +78,7 @@
       }
 
       .indicator-pane {
+        min-height: 300px;
         flex-shrink: 0;
         border-top: 1px solid #333;
         background: rgba(255, 255, 255, 0.15);
@@ -93,7 +94,7 @@
           <div id="chart-left" class="chart-area"></div>
 
           <div id="left-pane-1" class="chart-area indicator-pane"></div>
-          <div id="left-pane-2" class="indicator-pane"></div>
+          <div id="left-pane-2" class="chart-area indicator-pane"></div>
           <div id="left-pane-3" class="indicator-pane"></div>
           <div id="left-pane-4" class="indicator-pane"></div>
         </div>

@@ -1,6 +1,7 @@
 import { createChart } from "../src/index";
 import { ADXSeries } from "./indicators/ADXSeries";
 import { CandlestickSeries } from "./indicators/CandlestickSeries";
+import { SqueezeSeries } from "./indicators/SqueezeSeries";
 
 function generateCandles(
   count: number,
@@ -103,3 +104,12 @@ let indicatorLeft1 = createChart(document.getElementById("left-pane-1")!);
 const ADX1 = indicatorLeft1.api.addSeries(ADXSeries);
 
 ADX1.setData(normalizeCandles(fakeData));
+
+
+//
+
+let indicatorLeft2 = createChart(document.getElementById("left-pane-2")!);
+
+const SQUEEZE = indicatorLeft2.api.addSeries(SqueezeSeries);
+
+SQUEEZE.setData(normalizeCandles(fakeData));
