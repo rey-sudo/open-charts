@@ -1,6 +1,6 @@
 import { createChart } from "../src/index";
+import { ADXSeries } from "./ADXSeries";
 import { CandlestickSeries } from "./CandlestickSeries";
-import { MovingAverageSeries } from "./MovingAverageSeries";
 
 function generateCandles(
   count: number,
@@ -81,6 +81,7 @@ const fakeData = generateCandles(500, {
   volatility: 0.013,
 });
 
+/** 
 let chart1 = createChart(document.getElementById("chart-left")!);
 
 const candles1 = chart1.api.addSeries(CandlestickSeries);
@@ -96,10 +97,10 @@ let chart2 = createChart(document.getElementById("chart-right")!);
 const candles2 = chart2.api.addSeries(CandlestickSeries);
 
 candles2.setData(normalizeCandles(fakeData));
-
+*/
 
 let indicatorLeft1 = createChart(document.getElementById("left-pane-1")!);
 
-const ADX1 = indicatorLeft1.api.addSeries(CandlestickSeries);
+const ADX1 = indicatorLeft1.api.addSeries(ADXSeries);
 
 ADX1.setData(normalizeCandles(fakeData));

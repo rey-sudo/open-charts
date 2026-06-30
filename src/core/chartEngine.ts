@@ -365,4 +365,8 @@ export class ChartEngine {
   public get interval(): number {
     return this._series.values().next().value?.interval || 0;
   }
+
+  get primarySeries(): AnyChartSeries {
+    return this._series.values().next().value!;
+  }
 }

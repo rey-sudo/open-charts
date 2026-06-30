@@ -125,6 +125,17 @@ export interface SeriesDefinition<
 
   /** Optional price tag color. */
   priceTagColor?: string;
+
+  /**
+   * Returns the visible value range used to scale the chart.
+   * If omitted, the engine falls back to the default OHLC range.
+   */
+  valueRange(
+    data: readonly TData[],
+    values: readonly TValue[],
+    start: number,
+    end: number,
+  ): PriceRange;
 }
 
 export type AnyChartSeries = ChartSeries<any, any, any>;
