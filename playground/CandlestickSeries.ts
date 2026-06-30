@@ -10,18 +10,9 @@ export interface OHLCV {
   volume: number;
 }
 
-export interface SeriesParameter<T> {
-  type: string;
-  label: string;
-  value: T;
-}
-
-export type SeriesParameters = Record<string, SeriesParameter<unknown>>;
-
 interface CandlestickParams {
-  bullColor: SeriesParameter<string>;
-  bearColor: SeriesParameter<string>;
-  showBodyDetails: SeriesParameter<boolean>;
+  bullColor: string;
+  bearColor: string;
 }
 
 export const CandlestickSeries: SeriesDefinition<
@@ -35,13 +26,8 @@ export const CandlestickSeries: SeriesDefinition<
   color: "red",
   priceTagColor: "#F23645",
   params: {
-    bullColor: { type: "color", label: "Bullish Color", value: "#089981" },
-    bearColor: { type: "color", label: "Bearish Color", value: "#F23645" },
-    showBodyDetails: {
-      type: "boolean",
-      label: "Fancy Body fills",
-      value: true,
-    },
+    bullColor: "#089981",
+    bearColor: "#F23645",
   },
 
   // Las velas no calculan un indicador nuevo, devuelven directamente el clon de la data OHLC
@@ -59,9 +45,9 @@ export const CandlestickSeries: SeriesDefinition<
     priceMax: number,
   ): void {
     // 1. Extraer configuraciones dinámicas de los params o usar defaults
-    const bullCol = this.params.bullColor.value ?? "#00c87a";
-    const bearCol = this.params.bearColor.value ?? "#ff4060";
-    const fancyFill = this.params.showBodyDetails.value ?? true;
+    const bullCol = this.params.bullColor;
+    const bearCol = this.params.bearColor;
+    const fancyFill = false;
 
     // 2. Extraer propiedades de dibujo desde el motor (engine)
     // Nota: Adapté 'this.barWidth' a 'engine.barWidth' (común en estas librerías)
@@ -142,9 +128,7 @@ export const CandlestickSeries: SeriesDefinition<
     if (!d) return null;
 
     const bull = d.close >= d.open;
-    const col = bull
-      ? (this.params?.bullColor?.value ?? "#00c87a")
-      : (this.params?.bearColor?.value ?? "#ff4060");
+    const col = bull ? this.params.bullColor : this.params.bearColor;
 
     return {
       label: "OHLC",
