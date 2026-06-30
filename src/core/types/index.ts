@@ -75,6 +75,12 @@ export interface PanOrigin {
   viewStart: number;
 }
 
+export interface PriceTag {
+  value: number;
+  color: string;
+  label: string;
+}
+
 export interface SeriesDefinition<
   TData,
   TValue,
@@ -120,8 +126,10 @@ export interface SeriesDefinition<
   /** Returns a tooltip row for the given index. */
   tooltipRow(values: readonly TValue[], index: number): TTooltip | null;
 
-  /** Returns the last visible value for the price scale. */
-  lastValue?(data: readonly TData[], values: readonly TValue[]): number | null;
+  priceTags(
+    data: readonly TData[],
+    values: readonly TValue[],
+  ): readonly PriceTag[];
 
   /** Optional price tag color. */
   priceTagColor?: string;

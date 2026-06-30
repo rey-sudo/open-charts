@@ -39,7 +39,7 @@ export function _renderPriceScale(
   const steps = _nicePriceSteps(priceMin, priceMax, 6);
 
   steps.forEach((price) => {
-    const text =  _formatPrice(price);
+    const text = _formatPrice(price);
 
     const y =
       Math.round(engine.utils.yOf(price, pane, priceMin, priceMax)) + 0.5;
@@ -49,21 +49,14 @@ export function _renderPriceScale(
 
   // Draw the last price tag for every enabled series.
   engine._series.forEach(({ def, enabled, data, values }) => {
-    if (!enabled || !def.lastValue) return;
+    if (!enabled || !def.priceTags) {
+      return;
+    }
 
-    const price = def.lastValue(data, values);
+    for (const tag of def.priceTags(data, values)) {
+      _drawPriceLine(engine, tag.value, tag.color, priceMin, priceMax);
 
-    if (price == null) return;
-
-    const color =
-      def.priceTagColor ??
-      engine.options.colors.accent ??
-      engine.options.colors.bull;
-
-    // Draw the horizontal guide line.
-    _drawPriceLine(engine, price, color, priceMin, priceMax);
-
-    // Draw the price tag.
-    _drawPriceTag(engine, ctx, price, color, priceMin, priceMax);
+      _drawPriceTag(engine, ctx, tag.value, tag.color, priceMin, priceMax);
+    }
   });
 }

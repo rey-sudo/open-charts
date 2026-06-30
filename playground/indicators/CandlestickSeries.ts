@@ -1,5 +1,5 @@
-import type { ChartEngine } from "../src/core/chartEngine";
-import type { MainPane, SeriesDefinition } from "../src/core/types";
+import { ChartEngine } from "../../src/core/chartEngine";
+import { MainPane, SeriesDefinition } from "../../src/core/types";
 
 export interface OHLCV {
   time: number;
@@ -137,12 +137,23 @@ export const CandlestickSeries: SeriesDefinition<
     };
   },
 
-  lastValue(data: OHLCV[], values: OHLCV[]) {
+  priceTags(data: OHLCV[], values: OHLCV[]) {
     const last = data.at(-1);
-    return last ? last.close : null;
+
+    if (!last) {
+      return [];
+    }
+
+    return [
+      {
+        value: last.close,
+        color: this.priceTagColor!,
+        label: ""
+      },
+    ];
   },
 
-  valueRange(data, values, start, end) {
+  valueRange(data: OHLCV[], values: OHLCV[], start: number, end: number) {
     let lo = Infinity;
     let hi = -Infinity;
 

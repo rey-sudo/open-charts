@@ -1,5 +1,9 @@
 import type { ChartEngine } from "../../src/core/chartEngine";
-import type { MainPane, SeriesDefinition } from "../../src/core/types";
+import type {
+  MainPane,
+  PriceTag,
+  SeriesDefinition,
+} from "../../src/core/types";
 import { drawLineSeries } from "../helpers/drawLineSeries";
 
 export interface Candle {
@@ -164,10 +168,33 @@ export const ADXSeries: SeriesDefinition<
 -DI ${v.minusDI.toFixed(2)}`;
   },
 
-  lastValue(data, values) {
-    if (!values.length) return null;
+  priceTags(
+    data: readonly Candle[],
+    values: readonly ADXValue[],
+  ): readonly PriceTag[] {
+    const last = values.at(-1);
 
-    return values.at(-1)!.adx;
+    if (!last) {
+      return [];
+    }
+
+    return [
+      {
+        value: last.adx,
+        color: "#6CFF4C",
+        label: "ADX",
+      },
+      {
+        value: last.plusDI,
+        color: "#00C853",
+        label: "+DI",
+      },
+      {
+        value: last.minusDI,
+        color: "#F44336",
+        label: "-DI",
+      },
+    ];
   },
 
   priceTagColor: "#6CFF4C",
