@@ -1,5 +1,5 @@
-import type { ChartEngine } from "../src/core/chartEngine";
-import type { MainPane, SeriesDefinition } from "../src/core/types";
+import type { ChartEngine } from "../../src/core/chartEngine";
+import type { MainPane, SeriesDefinition } from "../../src/core/types";
 
 export const MovingAverageSeries: SeriesDefinition = {
   id: "ma",

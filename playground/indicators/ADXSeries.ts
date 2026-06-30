@@ -1,6 +1,6 @@
-import type { ChartEngine } from "../src/core/chartEngine";
-import type { MainPane, SeriesDefinition } from "../src/core/types";
-import { drawLineSeries } from "./helpers/drawLineSeries";
+import type { ChartEngine } from "../../src/core/chartEngine";
+import type { MainPane, SeriesDefinition } from "../../src/core/types";
+import { drawLineSeries } from "../helpers/drawLineSeries";
 
 export interface Candle {
   high: number;
@@ -253,7 +253,7 @@ function trueRange(high: number[], low: number[], close: number[]): number[] {
  * Pine ta.rma()
  * Exact implementation.
  */
-function rma(src: number[], length: number): number[] {
+export function rma(src: number[], length: number): number[] {
   const out = new Array(src.length).fill(NaN);
 
   let sum = 0;

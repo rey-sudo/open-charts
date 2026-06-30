@@ -1,6 +1,6 @@
 import { createChart } from "../src/index";
-import { ADXSeries } from "./ADXSeries";
-import { CandlestickSeries } from "./CandlestickSeries";
+import { ADXSeries } from "./indicators/ADXSeries";
+import { CandlestickSeries } from "./indicators/CandlestickSeries";
 
 function generateCandles(
   count: number,
@@ -80,7 +80,6 @@ const fakeData = generateCandles(500, {
   trend: 0.0002, // alcista
   volatility: 0.013,
 });
-
 
 let chart1 = createChart(document.getElementById("chart-left")!);
 
