@@ -4,6 +4,7 @@ export type CandleBubble = {
   low: number;
   close: number;
   volume: number;
+  time: number;
 
   start_ts: number;
   end_ts: number;
@@ -33,6 +34,14 @@ export function generateCandleBubble(
 
   let lastClose = startPrice;
 
+  // Estado para la EMA y el flujo de órdenes
+  let lastSignal = 0;
+  let orderFlowBias = 0;
+
+  const SPAN = 20;
+  const ALPHA = 2 / (SPAN + 1);
+  const THRESHOLD = 0.15;
+
   for (let i = 0; i < count; i++) {
     const open = lastClose;
 
@@ -54,49 +63,65 @@ export function generateCandleBubble(
 
     const start_ts = startTs + i * intervalMs;
 
-    // ---------- Nuevos atributos ----------
-    const buy_qty = Math.floor(50 + Math.random() * 250);
-    const sell_qty = Math.floor(50 + Math.random() * 250);
+    // -----------------------------------------------------------------
+    // Simulación de order flow con persistencia (más parecido al mercado)
+    // -----------------------------------------------------------------
 
-    const totalQty = buy_qty + sell_qty;
+    orderFlowBias += (Math.random() - 0.5) * 0.08;
+    orderFlowBias = Math.max(-0.9, Math.min(0.9, orderFlowBias));
 
-    // Delta entre compras y ventas (-1..1)
-    const delta_pct = Number(((buy_qty - sell_qty) / totalQty).toFixed(3));
+    const totalQty = Math.floor(200 + Math.random() * 300);
 
-    // Señal con un poco de ruido
-    const signal = Number(
-      Math.max(
-        -1,
-        Math.min(1, delta_pct + (Math.random() - 0.5) * 0.2),
-      ).toFixed(3),
-    );
+    const buy_qty = Math.round(totalQty * (0.5 + orderFlowBias / 2));
+    const sell_qty = totalQty - buy_qty;
 
-    const bubble_color =
-      delta_pct > 0.05 ? "green" : delta_pct < -0.05 ? "red" : "gray";
+    // 1. Delta normalizado
+    const delta_pct =
+      totalQty === 0 ? 0 : (buy_qty - sell_qty) / totalQty;
 
-    const bubble_size = Number(
-      (10 + Math.abs(delta_pct) * 35 + Math.random() * 5).toFixed(2),
-    );
+    // 2. EMA(span=20, adjust=False)
+    const signal =
+      i === 0
+        ? delta_pct
+        : ALPHA * delta_pct + (1 - ALPHA) * lastSignal;
 
-    const show_bubble = Math.random() > 0.3;
-    // --------------------------------------
+    lastSignal = signal;
+
+    // 3. Filtro de ruido
+    const show_bubble = Math.abs(signal) > THRESHOLD;
+
+    // 4. Color
+    const bubble_color = !show_bubble
+      ? "gray"
+      : signal > 0
+        ? "green"
+        : "red";
+
+    // 5. Tamaño
+    const bubble_size = show_bubble
+      ? +(10 + 40 * Math.abs(signal)).toFixed(2)
+      : 0;
 
     candles.push({
-      open: Number(open.toFixed(2)),
-      high: Number(high.toFixed(2)),
-      low: Number(low.toFixed(2)),
-      close: Number(close.toFixed(2)),
-      volume: Number(volume.toFixed(5)),
+      open: +open.toFixed(2),
+      high: +high.toFixed(2),
+      low: +low.toFixed(2),
+      close: +close.toFixed(2),
+      volume: +volume.toFixed(5),
+
       start_ts,
       end_ts: start_ts + intervalMs,
+      time: Math.floor(start_ts / 1000),
 
       buy_qty,
       sell_qty,
-      delta_pct,
-      signal,
+
+      delta_pct: +delta_pct.toFixed(3),
+      signal: +signal.toFixed(3),
+
+      show_bubble,
       bubble_color,
       bubble_size,
-      show_bubble,
     });
 
     lastClose = close;

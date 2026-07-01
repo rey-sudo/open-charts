@@ -129,7 +129,7 @@ export const CandleBubbleSeries: SeriesDefinition<
 
     // 3. Bucle de renderizado optimizado para la vista actual
     for (let i = engine.viewStart; i < engine.viewEnd && i < data.length; i++) {
-      const d: any = data[i]; // Estructura OHLC: { o, h, l, c }
+      const d: CandleBubble = data[i]; // Estructura OHLC: { o, h, l, c }
       if (!d) continue;
 
       // Conversión de coordenadas usando los métodos del engine
@@ -180,18 +180,11 @@ export const CandleBubbleSeries: SeriesDefinition<
       }
 
       if (d.show_bubble) {
-        const color =
-          d.bubble_color === "green"
-            ? "#00C853"
-            : d.bubble_color === "red"
-              ? "#F44336"
-              : "#9E9E9E";
-
         const radius = Math.max(2, d.bubble_size * 0.5);
 
         const bubbleOffset = 10; // separación en píxeles debajo de la mecha
 
-        drawSphere(ctx, x, yL + radius + bubbleOffset, radius, color);
+        drawSphere(ctx, x, yL + radius + bubbleOffset, radius, d.bubble_color);
       }
     }
 

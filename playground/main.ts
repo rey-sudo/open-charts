@@ -17,7 +17,7 @@ let chart1 = createChart(document.getElementById("chart-left")!);
 
 const candles1 = chart1.api.addSeries(CandleBubbleSeries);
 
-candles1.setData(normalizeCandles(fakeData));
+candles1.setData(fakeData);
 /** 
 //const MAseries = chart.api.addSeries(MovingAverageSeries);
 
