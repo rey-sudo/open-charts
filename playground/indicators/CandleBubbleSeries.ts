@@ -44,7 +44,7 @@ function drawSphere(
   ctx.arc(x, y, radius, 0, Math.PI * 2);
   ctx.fillStyle = body;
   ctx.fill();
-  ctx.lineWidth = Math.max(1, radius * 0.04);
+  ctx.lineWidth = Math.max(0.25, radius * 0.02);
   ctx.strokeStyle = dark;
   ctx.stroke();
 
