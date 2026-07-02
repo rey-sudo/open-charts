@@ -57,6 +57,7 @@ export interface ChartColors {
 }
 
 export interface ChartOptions {
+  legend: string;
   rightPadBars: number;
   barWidth: number;
   minBarWidth: number;
@@ -66,12 +67,14 @@ export interface ChartOptions {
 
   priceScaleWidth: number;
 
+  fontSizeLarge: string;
   fontSizeNormal: string;
   fontSizeSmall: string;
   fontFamily: string;
 }
 
 export const DEFAULT_OPTIONS: ChartOptions = {
+  legend: "CHART",
   rightPadBars: 20,
   barWidth: DEFAULT_BAR_W,
   minBarWidth: MIN_BAR_W,
@@ -80,6 +83,7 @@ export const DEFAULT_OPTIONS: ChartOptions = {
 
   priceScaleWidth: PRICE_SCALE_W,
 
+  fontSizeLarge: "16px",
   fontSizeNormal: "12px",
   fontSizeSmall: "9px",
   fontFamily: "Inter, sans-serif",

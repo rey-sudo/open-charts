@@ -1,6 +1,7 @@
 import { PRICE_SCALE_W } from "./config";
 import type { ChartEngine } from "./chartEngine";
 import { _updateScrollThumb } from "../timeScale/_updateScrollThumb";
+import { _buildLegend } from "../ui/_buildLegend";
 
 /**
  * Configures a canvas for HiDPI rendering.
@@ -134,6 +135,8 @@ export function _resize(engine: ChartEngine): void {
 
   // Synchronize the scrollbar with the new viewport.
   engine.timeScale.updateScrollThumb();
+
+  _buildLegend(engine);
 
   // Schedule a full redraw.
   engine.dirty = true;

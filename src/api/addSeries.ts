@@ -2,7 +2,7 @@ import type { ChartEngine } from "../core/chartEngine";
 import {
   ChartSeries,
   type AnyChartSeries,
-  type SeriesDefinition,
+  type AnySeriesDefinition,
 } from "../core/types";
 
 /**
@@ -20,10 +20,7 @@ export function addSeries<
   TData,
   TValue,
   TParams extends Record<string, unknown>,
->(
-  engine: ChartEngine,
-  def: SeriesDefinition<TData, TValue, TParams>,
-): AnyChartSeries {
+>(engine: ChartEngine, def: AnySeriesDefinition): AnyChartSeries {
   // Clone the indicator parameter definitions.
   const params: Record<string, unknown> = {};
 

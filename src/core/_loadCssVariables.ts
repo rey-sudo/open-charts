@@ -15,7 +15,11 @@ export function _loadCssVariables(engine: ChartEngine): void {
   }
 
   // Typography
-  const { fontSizeNormal, fontSizeSmall, fontFamily } = engine.options;
+  const { fontSizeLarge, fontSizeNormal, fontSizeSmall, fontFamily } = engine.options;
+
+    if (fontSizeLarge) {
+    root.style.setProperty("--fontSizeLarge", fontSizeLarge);
+  }
 
   if (fontSizeNormal) {
     root.style.setProperty("--fontSizeNormal", fontSizeNormal);

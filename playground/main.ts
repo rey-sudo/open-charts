@@ -10,14 +10,17 @@ import {
 const fakeData = generateCandleBubble(500, {
   startPrice: 60_000,
   trend: 0.0002, // alcista
-  volatility: 0.013,
+  volatility: 0.010,
 });
 
 let chart1 = createChart(document.getElementById("chart-left")!);
 
+chart1.api.applyOptions({ legend: "Bitcoin/Tether USD · 4h" });
+
 const candles1 = chart1.api.addSeries(CandleBubbleSeries);
 
 candles1.setData(fakeData);
+
 /** 
 //const MAseries = chart.api.addSeries(MovingAverageSeries);
 

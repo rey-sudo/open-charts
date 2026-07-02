@@ -87,6 +87,13 @@ export interface LegendItem {
   color: string;
 }
 
+export type AnySeriesDefinition = SeriesDefinition<
+  unknown,
+  unknown,
+  unknown,
+  unknown
+>;
+
 export interface SeriesDefinition<
   TData,
   TValue,

@@ -228,28 +228,16 @@ canvas.pricescale-canvas {
 }
 
 .chart-legend-item {
-  color: var(--text-dim);
   align-items: center;
   display: flex;
   gap: 0.25rem;
-  font-size: 12px;
+  font-size: var(--fontSizeNormal);
 }
 
 .chart-legend-symbol {
   white-space: nowrap;
   color: var(--text);
-  font-size: 16px;
-}
-
-.chart-legend-label {
-  white-space: nowrap;
-  color: var(--text);
-  font-size: 12px;
-}
-
-.chart-legend-val {
-  color: var(--text-dim);
-  font-size: 12px;
+  font-size: var(--fontSizeLarge);
 }
 
 #chart-indicators {

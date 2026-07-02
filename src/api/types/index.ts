@@ -1,5 +1,10 @@
 import type { ChartEngine } from "../../core/chartEngine";
-import type { AnyChartSeries, ChartSeries, SeriesDefinition } from "../../core/types";
+import type { ChartOptions } from "../../core/config";
+import type {
+  AnyChartSeries,
+  AnySeriesDefinition
+} from "../../core/types";
+import { _applyOptions } from "../_applyOptions";
 import { addSeries } from "../addSeries";
 
 /**
@@ -9,16 +14,28 @@ export class ChartApi {
   constructor(private readonly engine: ChartEngine) {}
 
   /**
-   * Registers a new indicator series.
+   * Creates and registers a new chart series.
    *
-   * The indicator parameters are cloned to keep each series instance
-   * independent from its original definition. If chart data is already
-   * available, the indicator values are computed immediately.
+   * The series is instantiated from the provided series definition and added
+   * to the chart. Each registered series maintains its own data, computed
+   * values, and parameter state independently of the original definition.
    *
-   * @param def Indicator definition.
-   * @returns The chart instance for method chaining.
+   * @param def The series definition describing how the series computes and renders.
+   * @returns The created series instance.
    */
-  public addSeries(def: SeriesDefinition): AnyChartSeries {
+  public addSeries(def: AnySeriesDefinition): AnyChartSeries {
     return addSeries(this.engine, def);
+  }
+
+  /**
+   * Applies one or more chart options.
+   *
+   * Only the properties provided in `newOptions` are updated; all other
+   * existing options remain unchanged.
+   *
+   * @param newOptions Partial chart configuration to apply.
+   */
+  public applyOptions(newOptions: Partial<ChartOptions>) {
+    _applyOptions(this.engine, newOptions);
   }
 }
